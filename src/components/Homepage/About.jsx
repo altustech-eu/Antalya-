@@ -88,7 +88,7 @@ const CareerSection = () => {
             {specialisms.map((card, i) => (
               <div 
                 key={i} 
-                className={`relative group rounded-[1.5rem] overflow-hidden transition-all duration-500 hover:shadow-2xl flex flex-col justify-end p-8 min-h-[260px]
+                className={`relative group rounded-[1.5rem] overflow-hidden transition-all duration-500 hover:shadow-2xl flex flex-col justify-end p-8 min-h-[360px]
                 ${card.span}
                 ${card.type === 'dark' ? 'bg-[#0a1631] items-start' : ''}
                 ${card.type === 'dark-purple' ? 'bg-[#150a33] min-h-[320px]' : 'bg-white border border-gray-100'}`}

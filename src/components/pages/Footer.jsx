@@ -24,7 +24,7 @@ export default function Footer() {
     <footer className="w-full font-sans">
       
       {/* 1. BRANDED REGISTRATION CTA BAR */}
-      <div className="bg-[#4a90bc] py-10 md:py-14">
+      <div className="bg-[#0052D9] py-10 md:py-14">
         <div className="max-w-[1600px] mx-auto px-8 md:px-16 flex flex-col md:flex-row items-center justify-between gap-8">
           <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tight leading-tight max-w-2xl text-center md:text-left">
             Join our global talent pool today and find your next professional milestone.
