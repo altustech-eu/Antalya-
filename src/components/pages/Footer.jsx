@@ -2,8 +2,7 @@ import React from 'react';
 import { 
   Instagram, 
   Linkedin, 
-  Twitter, 
-
+  Twitter,
   Facebook, 
   ChevronRight, 
   ArrowUpCircle,

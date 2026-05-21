@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BiWinkSmile, BiMenu, BiX, BiChevronDown } from 'react-icons/bi'; 
+import {BiMenu, BiX, BiChevronDown } from 'react-icons/bi'; 
 import { HiOutlineUserCircle } from 'react-icons/hi2'; 
 
 const GrbHeader = () => {
