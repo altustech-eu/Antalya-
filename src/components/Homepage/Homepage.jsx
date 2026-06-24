@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Hero from './Hero';
-import Infinityscroll from './infinityscrolling';
+// import Infinityscroll from './infinityscrolling';
 import Services from './textsection';
 import About from './About';
 import Work from './CareerAdvice';
@@ -15,7 +15,7 @@ export default function Home() {
     <div className="bg-slate-900 text-white">
       
       <Hero />
-      <Infinityscroll />
+      {/* <Infinityscroll /> */}
       <Services />
       <About />
       <Work />

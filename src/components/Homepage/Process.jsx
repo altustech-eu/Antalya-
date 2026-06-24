@@ -1,242 +1,123 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowRight, Users, Target, Award, ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
+import React from 'react';
+import { ArrowRight } from 'lucide-react';
 
 const EmployerServices = () => {
-  const scrollingText = "Reliable recruitment solutions for Healthcare, Education, IT, and Cybersecurity sectors in Kuwait and the GCC.";
-
-  // Image carousel data for the left side
-  const carouselImages = [
-    {
-      src: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=1200&auto=format&fit=crop",
-      alt: "Strategic business meeting with Antalya recruitment team in Kuwait City",
-      label: "Strategic Planning"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop",
-      alt: "Healthcare professionals collaborating at Antalya Manpower Kuwait",
-      label: "Healthcare Recruitment"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop",
-      alt: "Antalya recruitment team interview session in Kuwait City",
-      label: "Talent Acquisition"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1200&auto=format&fit=crop",
-      alt: "Professional networking at Antalya Manpower GCC recruitment event",
-      label: "Networking"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=1200&auto=format&fit=crop",
-      alt: "Antalya staffing solutions team in Kuwait office meeting",
-      label: "Staffing Solutions"
-    }
-  ];
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-
-  // Auto-play functionality
-  useEffect(() => {
-    if (!isPlaying) return;
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % carouselImages.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [isPlaying, carouselImages.length]);
-
-  const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? carouselImages.length - 1 : prevIndex - 1
-    );
-  };
-
-  const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % carouselImages.length);
-  };
-
-  const goToSlide = (index) => {
-    setCurrentIndex(index);
-  };
-
   return (
-    <section className="bg-white overflow-hidden font-sans py-12 md:py-20">
-      <div className="max-w-[1600px] mx-auto px-6 md:px-16">
-        <div className="flex flex-col lg:flex-row items-stretch bg-white rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl min-h-[600px] md:min-h-[650px] relative border border-gray-100">
-          
-          {/* LEFT: IMAGE CAROUSEL SECTION WITH CLIP MASK */}
-          <div className="lg:w-1/2 relative min-h-[400px] md:min-h-[500px] overflow-hidden">
-            {/* Clip Mask Container */}
-            <div 
-              className="absolute inset-0 bg-[#0658d4]"
-              style={{ 
-                clipPath: 'polygon(0 0, 75% 0, 85% 100%, 0% 100%)',
-                zIndex: 2
-              }}
-            >
-              {/* Image Carousel inside Clip Mask */}
-              <div className="relative w-full h-full">
-                {carouselImages.map((image, index) => (
-                  <div
-                    key={index}
-                    className={`absolute inset-0 transition-all duration-700 ease-in-out ${
-                      index === currentIndex 
-                        ? 'opacity-100 scale-100' 
-                        : 'opacity-0 scale-110'
-                    }`}
-                  >
-                    <img 
-                      src={image.src} 
-                      className="w-full h-full object-cover"
-                      alt={image.alt}
-                    />
-                    {/* Dark overlay for text readability */}
-                    <div className="absolute inset-0 bg-black/20" />
-                    
-                    {/* Image label */}
-                    <div className="absolute bottom-6 left-6 bg-black/50 backdrop-blur-sm px-4 py-2 rounded-full z-10">
-                      <span className="text-white text-xs font-medium tracking-wider uppercase">
-                        {image.label}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+    <section className="relative overflow-hidden bg-[#f4f4f4] font-['Inter',sans-serif]">
 
-                {/* Carousel Controls inside clip mask */}
-                <div className="absolute bottom-6 right-6 flex items-center gap-3 z-10">
-                  <button 
-                    onClick={() => setIsPlaying(!isPlaying)}
-                    className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-white/30 transition-all flex items-center justify-center"
-                    aria-label={isPlaying ? 'Pause slideshow' : 'Play slideshow'}
-                  >
-                    {isPlaying ? <Pause size={16} /> : <Play size={16} />}
-                  </button>
-                  <button 
-                    onClick={goToPrevious}
-                    className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-white/30 transition-all flex items-center justify-center"
-                    aria-label="Previous image"
-                  >
-                    <ChevronLeft size={18} />
-                  </button>
-                  <button 
-                    onClick={goToNext}
-                    className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-white/30 transition-all flex items-center justify-center"
-                    aria-label="Next image"
-                  >
-                    <ChevronRight size={18} />
-                  </button>
-                </div>
+      {/* LARGE FADED BACKGROUND TEXT */}
+      <div className="pointer-events-none absolute left-0 top-16 z-0 w-full overflow-hidden whitespace-nowrap">
+        <div className="animate-marquee-slow text-[72px] font-black leading-none tracking-[-0.06em] text-[#d3d4d8] md:text-[92px] lg:text-[118px]">
+          Trusted by the world’s leading employers for supplying first-class talent &nbsp; Trusted by the world’s leading employers for supplying first-class talent &nbsp;
+        </div>
+      </div>
 
-                {/* Dot Indicators inside clip mask */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                  {carouselImages.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => goToSlide(index)}
-                      className={`transition-all duration-300 rounded-full ${
-                        index === currentIndex 
-                          ? 'w-8 h-1.5 bg-[#0658d4]' 
-                          : 'w-1.5 h-1.5 bg-white/50 hover:bg-white/80'
-                      }`}
-                      aria-label={`Go to slide ${index + 1}`}
-                    />
-                  ))}
-                </div>
+      <div className="relative z-10 mx-auto grid min-h-screen max-w-[1800px] grid-cols-1 pt-[280px] lg:grid-cols-[56%_44%] lg:pt-[360px]">
 
-                {/* Vertical Text Label */}
-                <div className="absolute bottom-10 right-4 origin-bottom-right -rotate-90 text-white font-semibold uppercase tracking-[0.3em] text-[10px] md:text-sm opacity-80 whitespace-nowrap z-10 pointer-events-none">
-                    Kuwait's Trusted Recruitment Partner
-                </div>
-              </div>
+        {/* LEFT IMAGE AREA */}
+        <div className="relative min-h-[620px] overflow-hidden lg:min-h-[760px]">
+
+          {/* BLUE IMAGE BLOCK */}
+          <div className="absolute left-0 top-0 h-full w-[60%] overflow-hidden bg-[#0658d4]">
+            <img
+              src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1200&auto=format&fit=crop"
+              alt="Employer recruitment meeting"
+              className="h-full w-full object-cover grayscale mix-blend-multiply opacity-90"
+            />
+
+            <div className="absolute inset-0 bg-[#0658d4]/75"></div>
+
+            {/* BLUE ANGLE DECOR */}
+            <div className="absolute left-[8%] top-[5%] h-[115%] w-[70px] rotate-[27deg] bg-[#096cff] opacity-95"></div>
+
+            {/* GRAIN */}
+            <div className="absolute inset-0 opacity-[0.22] mix-blend-overlay grain-layer"></div>
+
+            {/* VERTICAL TEXT */}
+            <div className="absolute bottom-16 right-7 z-20 origin-bottom-right -rotate-90 text-3xl font-black tracking-[-0.04em] text-white">
+              Hiring early talent
             </div>
-
-            {/* Fallback background for areas outside clip mask */}
-            <div className="absolute inset-0 bg-[#0658d4] opacity-10"></div>
           </div>
 
-          {/* RIGHT: TEXT CONTENT SECTION */}
-          <div className="lg:w-1/2 flex flex-col bg-white relative">
-            
-            {/* INTERNAL AUTOSCROLLING HEADER */}
-            <div className="bg-gray-50 py-4 border-b border-gray-100 overflow-hidden whitespace-nowrap">
-              <div className="flex animate-marquee-fast">
-                {[...Array(4)].map((_, i) => (
-                  <span key={i} className="text-gray-400 text-[10px] font-semibold mx-10 uppercase tracking-[0.2em]">
-                    {scrollingText}
-                  </span>
-                ))}
-              </div>
-            </div>
+          {/* BLACK & WHITE IMAGE BLOCK */}
+          <div className="absolute right-0 top-0 h-full w-[52%] overflow-hidden rounded-tr-[90px] rounded-br-[90px] bg-white">
+            <img
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop"
+              alt="Professional employer services"
+              className="h-full w-full object-cover grayscale"
+            />
 
-            <div className="p-10 md:p-20 flex flex-col justify-center h-full">
-              {/* Sector Label */}
-              <span className="text-[#0658d4] font-bold text-[10px] md:text-xs uppercase tracking-[0.4em] mb-6 block text-left">
-                For Employers
+            <div className="absolute inset-0 bg-white/5"></div>
+
+            {/* WHITE DECORATIVE SHAPE */}
+            <div className="absolute bottom-24 right-20 h-[220px] w-[220px] rounded-br-[100px] rounded-tl-[100px] bg-[#f4f4f4]"></div>
+          </div>
+        </div>
+
+        {/* RIGHT CONTENT AREA */}
+        <div className="relative flex min-h-[620px] items-center bg-[#f4f4f4] px-8 py-20 md:px-16 lg:min-h-[760px] lg:px-20">
+
+          <div className="max-w-[720px]">
+
+            <span className="mb-6 block text-[13px] font-bold uppercase tracking-[0.42em] text-[#0658d4]">
+              Make a Hire
+            </span>
+
+            <h2 className="mb-8 text-[48px] font-black leading-[0.95] tracking-[-0.055em] text-black md:text-[68px] lg:text-[78px]">
+              Employer Services
+            </h2>
+
+            {/* QUOTE */}
+            <div className="relative mb-9">
+              <span className="absolute -left-8 -top-7 text-[100px] font-black leading-none text-[#d8d8d8]">
+                “
               </span>
 
-              {/* Main Heading */}
-              <h2 className="text-4xl md:text-6xl font-semibold text-slate-800 leading-[0.9] tracking-tighter mb-8 md:mb-10 text-left">
-                Strategic Staffing <br /> Solutions
-              </h2>
-
-              {/* Blockquote Section */}
-              <div className="relative mb-8 md:mb-10 pl-6 border-l-4 border-[#0658d4]/20">
-                <p className="text-xl md:text-2xl font-medium text-slate-700 leading-tight italic text-left">
-                  "Excellence is not a skill, it is an attitude that drives the workforce of the future."
-                </p>
-              </div>
-
-              {/* Description Text */}
-              <p className="text-gray-500 text-base md:text-lg leading-relaxed mb-10 md:mb-12 max-w-xl text-left">
-                Antalya For Recruiting Manpower LLC is a premier staffing partner registered in <span className="font-semibold text-gray-700">Kuwait City</span>. 
-                We deliver high-impact recruitment for <span className="font-semibold text-gray-700">Healthcare, Education, IT, and Cybersecurity</span>, 
-                ensuring every hire matches your company's standards of excellence.
+              <p className="relative max-w-[680px] text-[26px] font-normal italic leading-[1.18] tracking-[-0.02em] text-[#20232a] md:text-[32px]">
+                The best workforce strategy is not just hiring people, but building capability with the right talent at the right time.
               </p>
 
-              {/* Trust Indicators */}
-              <div className="flex flex-wrap gap-6 mb-8 md:mb-10">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-[#0658d4]/10 rounded-full flex items-center justify-center">
-                    <Users className="w-4 h-4 text-[#0658d4]" />
-                  </div>
-                  <span className="text-sm text-gray-600">120k+ Placements</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-[#0658d4]/10 rounded-full flex items-center justify-center">
-                    <Award className="w-4 h-4 text-[#0658d4]" />
-                  </div>
-                  <span className="text-sm text-gray-600">100% Compliance</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-[#0658d4]/10 rounded-full flex items-center justify-center">
-                    <Target className="w-4 h-4 text-[#0658d4]" />
-                  </div>
-                  <span className="text-sm text-gray-600">4.9/5 Rating</span>
-                </div>
-              </div>
-
-              {/* Button */}
-              <button className="flex items-center gap-3 bg-[#0658d4] text-white px-8 md:px-10 py-4 md:py-5 rounded-full font-bold w-full md:w-fit hover:bg-[#0547a8] transition-all shadow-xl shadow-blue-100 group justify-center">
-                Explore Employer Services 
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-              </button>
+              <p className="mt-5 text-base font-medium text-[#20232a]">
+                - Antalya For Recruiting Manpower LLC
+              </p>
             </div>
 
-            {/* DECORATIVE WATERMARK */}
-            <div className="absolute -bottom-10 -right-10 opacity-[0.02] pointer-events-none">
-              <div className="w-64 h-64 md:w-80 md:h-80 bg-slate-900 rounded-tl-[160px]"></div>
-            </div>
+            <p className="mb-10 max-w-[720px] text-[18px] font-normal leading-[1.65] text-[#20232a] md:text-[20px]">
+              Antalya For Recruiting Manpower LLC is a trusted staffing and recruitment
+              solutions partner registered in Ali Tower, Kuwait City. We support employers
+              with specialized recruitment and placement of Healthcare, Education,
+              Hospitality, IT and Cybersecurity professionals across Kuwait and the GCC.
+            </p>
+
+            <button className="group flex w-fit items-center gap-3 rounded-full bg-[#0658d4] px-9 py-5 text-lg font-bold text-white transition-all hover:bg-[#0547aa] hover:shadow-xl">
+              Employer services
+              <ArrowRight
+                size={22}
+                className="transition-transform group-hover:translate-x-1"
+              />
+            </button>
           </div>
         </div>
       </div>
 
       <style jsx>{`
-        @keyframes marquee-fast {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+        @keyframes marquee-slow {
+          0% {
+            transform: translateX(-10%);
+          }
+          100% {
+            transform: translateX(-55%);
+          }
         }
-        .animate-marquee-fast {
-          animation: marquee-fast 30s linear infinite;
+
+        .animate-marquee-slow {
+          animation: marquee-slow 34s linear infinite;
+        }
+
+        .grain-layer {
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.55'/%3E%3C/svg%3E");
+          background-repeat: repeat;
+          background-size: 180px 180px;
         }
       `}</style>
     </section>
