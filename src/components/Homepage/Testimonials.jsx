@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Quote } from "lucide-react";
+import { Star, Quote, Users, Award, ThumbsUp } from "lucide-react";
 
 const testimonials = [
   {
@@ -7,7 +7,7 @@ const testimonials = [
     company: "Capital Health Medical Center",
     role: "HR Director",
     image: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=300",
-    content: "Antalya Manpower provided us with exceptionally qualified nursing staff within a very tight deadline. Their recruitment process for healthcare is truly world-class.",
+    content: "Antalya For Recruiting Manpower LLC provided us with exceptionally qualified nursing staff within a very tight deadline. Their healthcare recruitment process in Kuwait is truly world-class.",
     rating: 5,
   },
   {
@@ -15,7 +15,7 @@ const testimonials = [
     company: "Global Education Group",
     role: "Operations Manager",
     image: "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=300",
-    content: "We've sourced over 50 educators through Antalya. Their ability to find native speakers and certified professionals is unmatched in the Kuwaiti market.",
+    content: "We've sourced over 50 educators through Antalya. Their ability to find native speakers and certified professionals is unmatched in the Kuwaiti education market.",
     rating: 5,
   },
   {
@@ -23,15 +23,31 @@ const testimonials = [
     company: "SecureTech Solutions",
     role: "CTO",
     image: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=300",
-    content: "Finding specialized Cybersecurity talent in the GCC is a challenge, but Antalya delivered local and international experts who integrated seamlessly into our team.",
+    content: "Finding specialized Cybersecurity talent in the GCC is a challenge, but Antalya delivered local and international experts who integrated seamlessly into our IT team.",
     rating: 5,
   },
   {
     name: "Mariam Yousuf",
-    company: "Elite Hospitality",
+    company: "Elite Hospitality Group",
     role: "General Manager",
     image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=300",
-    content: "The hospitality staff provided by Antalya are professional, well-trained, and possess excellent communication skills. They have become our go-to recruitment partner.",
+    content: "The hospitality professionals provided by Antalya are well-trained, culturally aware, and possess excellent communication skills. They've become our preferred recruitment partner in Kuwait.",
+    rating: 5,
+  },
+  {
+    name: "Ahmed Al-Sabah",
+    company: "Kuwait Tech Solutions",
+    role: "Head of Operations",
+    image: "https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&w=300",
+    content: "Antalya's understanding of the Kuwaiti IT landscape is exceptional. They helped us build a high-performing software development team in record time.",
+    rating: 5,
+  },
+  {
+    name: "Sarah Johnson",
+    company: "Gulf Education Institute",
+    role: "Academic Director",
+    image: "https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=300",
+    content: "From recruitment to onboarding, Antalya's team handled everything professionally. We've never had such a smooth hiring process for our academic staff.",
     rating: 5,
   },
 ];
@@ -50,7 +66,7 @@ function TestimonialCard({ testimonial }) {
           ))}
         </div>
 
-        <p className="text-slate-500 mb-6 md:mb-8 text-base md:text-lg leading-relaxed italic">
+        <p className="text-slate-600 mb-6 md:mb-8 text-base md:text-lg leading-relaxed italic">
           "{testimonial.content}"
         </p>
 
@@ -75,21 +91,21 @@ function TestimonialCard({ testimonial }) {
 export default function Testimonials() {
   return (
     <section className="py-16 md:py-24 bg-[#fcfcfc] relative overflow-hidden font-sans">
-      {/* Top Accent Bar in Antalya Orange */}
+      {/* Top Accent Bar */}
       <div className="absolute top-0 left-0 right-0 h-1 md:h-1.5 bg-[#f29100]"></div>
 
       <div className="relative z-10 max-w-[1600px] mx-auto px-6 md:px-16">
         {/* Header */}
         <div className="mb-12 md:mb-20">
           <span className="text-[#0658d4] font-bold text-[10px] md:text-xs uppercase tracking-[0.3em] mb-4 block">
-            Partner Success Stories
+            Client Testimonials
           </span>
           <h2 className="text-4xl md:text-6xl lg:text-[72px] font-bold text-slate-800 leading-[1.1] tracking-tight mb-6 md:mb-8">
-            What our <br />
-            <span className="text-[#0658d4]">clients say</span>
+            What Our <br />
+            <span className="text-[#0658d4]">Partners Say</span>
           </h2>
           <p className="text-gray-500 text-lg md:text-xl max-w-2xl leading-relaxed">
-            Reliable recruitment is the backbone of successful industry leaders. Hear from the businesses we empower across the GCC.
+            Trusted by industry leaders across Kuwait and the GCC. Hear from the businesses we empower with exceptional talent.
           </p>
         </div>
 
@@ -120,20 +136,46 @@ export default function Testimonials() {
           </div>
         </div>
 
-        {/* Responsive Stats */}
+        {/* Stats */}
         <div className="mt-16 md:mt-24 pt-12 md:pt-16 border-t border-gray-100">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12 text-center">
-            <div className="flex flex-col items-center">
-              <div className="text-4xl md:text-5xl font-bold text-slate-800 mb-1 tracking-tight">4.9/5</div>
-              <div className="text-[#0658d4] font-bold uppercase tracking-widest text-[10px] md:text-sm">Client Rating</div>
+            <div className="flex flex-col items-center group">
+              <div className="text-4xl md:text-5xl font-bold text-slate-800 mb-1 tracking-tight group-hover:text-[#0658d4] transition-colors">4.9/5</div>
+              <div className="text-[#0658d4] font-bold uppercase tracking-widest text-[10px] md:text-sm flex items-center gap-2">
+                <Star className="w-3 h-3 fill-current" /> Client Rating
+              </div>
             </div>
-            <div className="flex flex-col items-center border-y sm:border-y-0 sm:border-x border-gray-100 py-6 sm:py-0">
-              <div className="text-4xl md:text-5xl font-bold text-slate-800 mb-1 tracking-tight">120k+</div>
-              <div className="text-[#0658d4] font-bold uppercase tracking-widest text-[10px] md:text-sm">Candidates Placed</div>
+            <div className="flex flex-col items-center border-y sm:border-y-0 sm:border-x border-gray-100 py-6 sm:py-0 group">
+              <div className="text-4xl md:text-5xl font-bold text-slate-800 mb-1 tracking-tight group-hover:text-[#0658d4] transition-colors">120k+</div>
+              <div className="text-[#0658d4] font-bold uppercase tracking-widest text-[10px] md:text-sm flex items-center gap-2">
+                <Users className="w-3 h-3" /> Candidates Placed
+              </div>
             </div>
-            <div className="flex flex-col items-center">
-              <div className="text-4xl md:text-5xl font-bold text-slate-800 mb-1 tracking-tight">100%</div>
-              <div className="text-[#0658d4] font-bold uppercase tracking-widest text-[10px] md:text-sm">Compliance Rate</div>
+            <div className="flex flex-col items-center group">
+              <div className="text-4xl md:text-5xl font-bold text-slate-800 mb-1 tracking-tight group-hover:text-[#0658d4] transition-colors">100%</div>
+              <div className="text-[#0658d4] font-bold uppercase tracking-widest text-[10px] md:text-sm flex items-center gap-2">
+                <Award className="w-3 h-3" /> Compliance Rate
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="mt-16 md:mt-20 pt-12 md:pt-16 border-t border-gray-100">
+          <div className="bg-gradient-to-r from-[#0658d4] to-[#3d7699] rounded-3xl p-8 md:p-16 text-center text-white">
+            <h3 className="text-2xl md:text-4xl font-bold mb-4 tracking-tight">
+              Ready to Join Our <span className="text-[#f29100]">Success Stories</span>?
+            </h3>
+            <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto mb-8">
+              Partner with Antalya For Recruiting Manpower LLC for reliable, high-impact staffing solutions in Kuwait.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <button className="bg-white text-[#0658d4] px-8 md:px-10 py-3 md:py-4 rounded-full font-bold hover:bg-gray-100 transition-all shadow-xl flex items-center gap-2">
+                Request Staffing <ThumbsUp className="w-4 h-4" />
+              </button>
+              <button className="border-2 border-white text-white px-8 md:px-10 py-3 md:py-4 rounded-full font-bold hover:bg-white/10 transition-all">
+                Contact Our Team
+              </button>
             </div>
           </div>
         </div>

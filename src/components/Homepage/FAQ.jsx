@@ -1,30 +1,34 @@
 import { useEffect, useState } from 'react';
-import { Plus, Minus, MessageCircle } from 'lucide-react';
+import { Plus, Minus, MessageCircle, Phone, Mail, Clock } from 'lucide-react';
 
 const faqs = [
   {
-    question: 'How quickly can you deploy staff?',
-    answer: 'Deployment timelines depend on the sector and local regulations. For candidates already within the GCC, placement can take 2-4 weeks. International recruitment typically requires 6-10 weeks for visa processing and credentialing.'
+    question: 'How quickly can you deploy staff in Kuwait?',
+    answer: 'Deployment timelines depend on the sector and local regulations. For candidates already within the GCC, placement typically takes 2-4 weeks. International recruitment requires 6-10 weeks for visa processing, credentialing, and compliance verification.'
   },
   {
-    question: 'What sectors do you specialize in?',
-    answer: 'We focus on high-impact industries including Healthcare (Nursing and Allied Health), IT & Cybersecurity, Education, and Specialized Engineering. We ensure all candidates meet industry-specific certifications.'
+    question: 'What industries do you specialize in?',
+    answer: 'We focus on high-impact industries including Healthcare (Nursing, Allied Health, and Medical Professionals), IT & Cybersecurity, Education (Teachers and Administrators), Hospitality, and Specialized Engineering. We ensure all candidates meet industry-specific certifications and Kuwaiti regulatory requirements.'
   },
   {
-    question: 'Are your recruitment processes compliant?',
-    answer: 'Absolutely. We maintain 100% ethical compliance, adhering to both Kuwaiti labor laws and international recruitment standards. We handle all background checks, medical screenings, and document attestations.'
+    question: 'Are your recruitment processes fully compliant with Kuwaiti labor laws?',
+    answer: 'Absolutely. We maintain 100% ethical compliance, adhering strictly to Kuwaiti labor laws and international recruitment standards. We handle all background checks, medical screenings, credential verifications, and document attestations to ensure complete regulatory compliance.'
   },
   {
-    question: 'Do you offer post-placement support?',
-    answer: 'Yes. We provide onboarding support for the first 90 days to ensure a smooth transition. For large-scale manpower projects, we also offer ongoing liaison services between the employer and the workforce.'
+    question: 'What post-placement support do you offer?',
+    answer: 'We provide comprehensive onboarding support for the first 90 days to ensure a smooth transition for both employers and candidates. For large-scale manpower projects, we offer ongoing liaison services between the employer and the workforce, including performance monitoring and conflict resolution.'
   },
   {
-    question: 'Where is your headquarters located?',
-    answer: 'Antalya For Recruiting Manpower LLC is headquartered in Ali Tower, Kuwait City. We operate as a registered Staffing Company solution provider with global reach.'
+    question: 'Where is Antalya For Recruiting Manpower LLC located?',
+    answer: 'Antalya For Recruiting Manpower LLC is headquartered in Ali Tower, Kuwait City, specifically at Abdullah Al-Salem Street, Mirqab-Block 1, Capital Governorate. We operate as a fully registered Staffing Company solution provider with a growing presence across the GCC region.'
   },
   {
-    question: 'How do you verify candidate credentials?',
-    answer: 'Our verification process includes multi-level technical assessments, primary source verification (PSV) for medical staff, and rigorous reference checks to ensure the highest quality of talent.'
+    question: 'How do you verify candidate credentials and qualifications?',
+    answer: 'Our verification process includes multi-level technical assessments, primary source verification (PSV) for healthcare professionals, rigorous reference checks, and industry-specific certification validation. We ensure every candidate meets the highest quality standards before placement.'
+  },
+  {
+    question: 'Do you recruit for temporary or project-based positions?',
+    answer: 'Yes. We offer flexible staffing solutions including permanent placements, temporary staffing, and project-based recruitment. Our team works closely with employers to understand their specific needs and provide tailored workforce solutions.'
   }
 ];
 
@@ -56,14 +60,14 @@ export default function FAQ() {
         {/* Header */}
         <div className="mb-16 md:mb-20">
           <span className="text-[#0658d4] font-semibold text-xs uppercase tracking-[0.3em] mb-6 block">
-            Common Inquiries
+            FAQ
           </span>
           <h2 className="text-4xl md:text-7xl font-semibold text-slate-800 leading-[1.1] tracking-tight mb-8">
             Frequently Asked <br className="hidden md:block" />
             <span className="text-[#0658d4]">Questions</span>
           </h2>
           <p className="text-gray-500 text-lg md:text-xl max-w-2xl font-normal leading-relaxed">
-            Everything you need to know about our recruitment process, global deployment timelines, and how we empower your workforce.
+            Everything you need to know about our recruitment process, deployment timelines, compliance standards, and how we empower your workforce in Kuwait and the GCC.
           </p>
         </div>
 
@@ -115,14 +119,31 @@ export default function FAQ() {
             <div className="bg-slate-900 rounded-[2.5rem] p-10 md:p-12 text-white relative overflow-hidden">
                 <div className="absolute top-[-10%] right-[-10%] w-32 h-32 bg-[#0658d4] blur-[60px] opacity-30" />
                 <MessageCircle className="w-10 h-10 md:w-12 md:h-12 text-[#0658d4] mb-8" />
-                <h3 className="text-2xl md:text-3xl font-semibold tracking-tight mb-4">Partner With Us</h3>
-                <p className="text-gray-400 text-base md:text-lg mb-8 md:mb-10 leading-relaxed font-normal">
-                    Can't find the answer you're looking for? Our recruitment consultants are ready to assist you.
+                <h3 className="text-2xl md:text-3xl font-semibold tracking-tight mb-4">Need More Help?</h3>
+                <p className="text-gray-400 text-base md:text-lg mb-6 leading-relaxed font-normal">
+                    Can't find the answer you're looking for? Our recruitment consultants in Kuwait City are ready to assist you.
                 </p>
+                
+                {/* Contact Details */}
+                <div className="space-y-3 mb-8">
+                  <div className="flex items-center gap-3 text-sm text-gray-300">
+                    <Phone className="w-4 h-4 text-[#0658d4]" />
+                    <span>+965 69039059</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-gray-300">
+                    <Mail className="w-4 h-4 text-[#0658d4]" />
+                    <span>info@antalyamanpower.com.kw</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-gray-300">
+                    <Clock className="w-4 h-4 text-[#0658d4]" />
+                    <span>Sun-Thu: 9:00 AM - 6:00 PM</span>
+                  </div>
+                </div>
+                
                 <button 
-                    className="w-full py-4 md:py-5 bg-[#0658d4] text-white rounded-full font-bold text-lg hover:bg-[#3d7699] transition-all shadow-lg"
+                    className="w-full py-4 md:py-5 bg-[#0658d4] text-white rounded-full font-bold text-lg hover:bg-[#0547a8] transition-all shadow-lg flex items-center justify-center gap-2"
                 >
-                    Get in touch
+                    Contact Our Team <MessageCircle className="w-4 h-4" />
                 </button>
             </div>
           </div>
