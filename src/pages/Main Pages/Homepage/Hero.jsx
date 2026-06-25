@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, ChevronDown } from 'lucide-react';
-import AntalyaHeroImage from '../../assests/hero-image.png';
+import AntalyaHeroImage from '../../../assests/hero-image.jpg';
 
 const Hero = () => {
   const navigate = useNavigate();
