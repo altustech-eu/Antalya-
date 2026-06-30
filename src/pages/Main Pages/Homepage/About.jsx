@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   Users,
@@ -25,6 +26,7 @@ import {
 
 const CareerSection = () => {
   const sliderRef = useRef(null);
+  const navigate = useNavigate();
 
   const specialisms = [
     {
@@ -176,9 +178,14 @@ const CareerSection = () => {
                 Submit Your CV <Upload size={18} />
               </button>
 
-              <button className="bg-white text-slate-700 border-2 border-gray-200 px-10 py-4 rounded-full font-bold hover:bg-gray-50 transition-all text-left">
-                Request Staffing Solutions
-              </button>
+              
+  <button
+    type="button"
+    onClick={() => navigate("/searchpage")}
+    className="bg-[#ffffff] text-black px-10 py-4 rounded-full font-bold transition-all shadow-2xl shadow-blue-50 flex items-center gap-3"
+  >
+    Request Staffing Solutions <ArrowRight size={20} />
+  </button>
             </div>
           </div>
 
@@ -202,25 +209,29 @@ const CareerSection = () => {
       <section className="max-w-[1700px] mx-auto px-8 md:px-16 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 items-start">
 
-          {/* LEFT STICKY BOX */}
-          <div className="lg:col-span-4 lg:sticky lg:top-24 self-start z-10 bg-[#f5f5f5] py-4">
-            <span className="text-[#f29100] font-bold text-xs uppercase tracking-[0.4em] mb-6 block text-left">
-              Career Specialisms
-            </span>
+       {/* LEFT STICKY BOX */}
+<div className="lg:col-span-4 lg:sticky lg:top-24 self-start z-10 bg-[#f5f5f5] py-4">
+  <span className="text-[#f29100] font-bold text-xs uppercase tracking-[0.4em] mb-6 block text-left">
+    Career Specialisms
+  </span>
 
-            <h2 className="text-6xl md:text-[60px] font-bold text-slate-900 leading-[0.9] tracking-tighter mb-8 text-left">
-              The workforce <br />of tomorrow.
-            </h2>
+  <h2 className="text-6xl md:text-[60px] font-bold text-slate-900 leading-[0.9] tracking-tighter mb-8 text-left">
+    The workforce <br />of tomorrow.
+  </h2>
 
-            <p className="text-gray-500 text-xl leading-relaxed max-w-sm mb-12 text-left">
-              Explore high-impact career opportunities across Kuwait's fastest-growing industries —
-              from Healthcare and IT to Education and Hospitality.
-            </p>
+  <p className="text-gray-500 text-xl leading-relaxed max-w-sm mb-12 text-left">
+    Explore high-impact career opportunities across Kuwait's fastest-growing industries —
+    from Healthcare and IT to Education and Hospitality.
+  </p>
 
-            <button className="bg-[#0658d4] text-white px-10 py-4 rounded-full font-bold hover:bg-[#0547a8] transition-all shadow-2xl shadow-blue-50 flex items-center gap-3">
-              View All Roles <ArrowRight size={20} />
-            </button>
-          </div>
+  <button
+    type="button"
+    onClick={() => navigate("/searchpage")}
+    className="bg-[#0658d4] text-white px-10 py-4 rounded-full font-bold hover:bg-[#0547a8] transition-all shadow-2xl shadow-blue-50 flex items-center gap-3"
+  >
+    View All Roles <ArrowRight size={20} />
+  </button>
+</div>
 
           {/* RIGHT BENTO GRID */}
           <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-4 pb-20">
