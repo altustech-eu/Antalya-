@@ -181,7 +181,7 @@ const CareerSection = () => {
               
   <button
     type="button"
-    onClick={() => navigate("/searchpage")}
+    onClick={() => navigate("/")}
     className="bg-[#ffffff] text-black px-10 py-4 rounded-full font-bold transition-all shadow-2xl shadow-blue-50 flex items-center gap-3"
   >
     Request Staffing Solutions <ArrowRight size={20} />
@@ -226,7 +226,7 @@ const CareerSection = () => {
 
   <button
     type="button"
-    onClick={() => navigate("/searchpage")}
+    onClick={() => navigate("/")}
     className="bg-[#0658d4] text-white px-10 py-4 rounded-full font-bold hover:bg-[#0547a8] transition-all shadow-2xl shadow-blue-50 flex items-center gap-3"
   >
     View All Roles <ArrowRight size={20} />
