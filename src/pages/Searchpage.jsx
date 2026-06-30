@@ -1,1295 +1,938 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useMemo, useState } from "react";
 import {
-  MapPin,
-  Briefcase,
-  ChevronRight,
-  SlidersHorizontal,
-  Plus,
-  Minus,
-  ChevronDown,
-  Heart,
-  Shield,
-  GraduationCap,
-  Coffee,
-  Code,
-  Stethoscope,
-  Building2,
-  Users,
-  Clock,
   Search,
-  ChevronLeft,
-  ChevronRight as ChevronRightIcon,
-  ArrowRight,
-  BookOpen,
-  FileText,
-  MessageCircle,
-  Scale,
-  ClipboardCheck
+  ChevronRight,
+  ChevronDown,
+  Star,
+  Bookmark,
+  ArrowLeftRight,
+  X,
+  Check,
+  ShieldCheck
 } from "lucide-react";
 
-const jobs = [
+const providers = [
   {
     id: 1,
-    company: "Capital Health Medical Center",
-    title: "Registered Nurse - Critical Care",
-    location: "Kuwait City",
-    salary: "KWD 1,200 - 1,800",
-    type: "Healthcare",
-    image:
-      "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=900&auto=format&fit=crop",
-    icon: <Heart size={20} />,
+    name: "Antalya Manpower LLC",
+    logo: "AM",
+    category: "Healthcare recruitment",
     description:
-      "Join our world-class critical care team. We are seeking dedicated nurses with ICU, CCU, or emergency care experience.",
-    benefits: [
-      "Tax-free salary",
-      "Private health insurance",
-      "Annual flight allowance",
-      "Housing allowance",
-      "Professional development"
-    ],
-    requirements: [
-      "Bachelor's degree in Nursing",
-      "Valid nursing license",
-      "2+ years critical care experience",
-      "BLS and ACLS certification"
-    ]
+      "End-to-end manpower recruitment, candidate screening, employer coordination, documentation, and deployment support for Kuwait and GCC healthcare employers.",
+    rating: 4.9,
+    reviews: 273,
+    verified: true,
+    tags: ["Nurses", "CV Screening", "Interview Coordination", "Open Vacancies"],
+    country: "Kuwait",
+    language: "English",
+    companyType: "Hospitals & Clinics"
   },
   {
     id: 2,
-    company: "SecureTech Solutions",
-    title: "Cybersecurity Analyst",
-    location: "Kuwait City",
-    salary: "KWD 1,800 - 2,500",
-    type: "IT & Security",
-    image:
-      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=900&auto=format&fit=crop",
-    icon: <Shield size={20} />,
+    name: "Kuwait Healthcare Careers",
+    logo: "KHC",
+    category: "Healthcare recruitment",
     description:
-      "Protect client infrastructure against cyber threats and support incident monitoring, response, and compliance reporting.",
-    benefits: [
-      "Competitive salary",
-      "Performance bonuses",
-      "Certification support",
-      "Modern office",
-      "Career growth"
-    ],
-    requirements: [
-      "Computer Science degree",
-      "3+ years cybersecurity experience",
-      "SIEM knowledge",
-      "CISSP, CEH, or equivalent preferred"
-    ]
+      "Specialized hiring support for nurses, physiotherapists, radiology technicians, lab technicians, caregivers, and allied healthcare professionals.",
+    rating: 4.8,
+    reviews: 221,
+    verified: true,
+    tags: ["Physiotherapists", "Nurses", "Medical Processing", "Visa Documentation"],
+    country: "Kuwait",
+    language: "English",
+    companyType: "Hospitals & Clinics"
   },
   {
     id: 3,
-    company: "Global Education Group",
-    title: "Secondary School Teacher - Science",
-    location: "Salmiya, Kuwait",
-    salary: "KWD 1,200 - 1,600",
-    type: "Education",
-    image:
-      "https://images.unsplash.com/photo-1523050854058-8df90110c7f1?q=80&w=900&auto=format&fit=crop",
-    icon: <GraduationCap size={20} />,
+    name: "Gulf Hospitality Jobs",
+    logo: "GHJ",
+    category: "Hospitality & restaurant",
     description:
-      "Teach secondary science in a dynamic academic environment with strong curriculum support and professional development.",
-    benefits: [
-      "Tax-free salary",
-      "Housing allowance",
-      "Health insurance",
-      "Annual tickets",
-      "Training support"
-    ],
-    requirements: [
-      "Science or Education degree",
-      "Teaching qualification",
-      "2+ years teaching experience",
-      "Strong classroom management"
-    ]
+      "Recruitment support for hotels, restaurants, cafes, catering companies, baristas, chefs, waiters, kitchen helpers, and hospitality supervisors.",
+    rating: 4.9,
+    reviews: 198,
+    verified: true,
+    tags: ["Barista", "Kitchen Helper", "Restaurant Supervisor", "Employer Interview"],
+    country: "Kuwait",
+    language: "English",
+    companyType: "Hotels & Restaurants"
   },
   {
     id: 4,
-    company: "Elite Hospitality Group",
-    title: "Hospitality Manager - 5-Star Hotel",
-    location: "Kuwait City",
-    salary: "KWD 1,500 - 2,200",
-    type: "Hospitality",
-    image:
-      "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=900&auto=format&fit=crop",
-    icon: <Coffee size={20} />,
+    name: "Restaurant Staffing Desk",
+    logo: "RSD",
+    category: "Hospitality & restaurant",
     description:
-      "Lead hotel operations and guest service teams for a premium hospitality brand in Kuwait.",
-    benefits: [
-      "Accommodation allowance",
-      "Health insurance",
-      "Meal allowance",
-      "Career advancement",
-      "Bonus potential"
-    ],
-    requirements: [
-      "Hospitality degree",
-      "5+ years luxury hotel experience",
-      "Leadership skills",
-      "Guest service excellence"
-    ]
+      "Candidate sourcing and screening for restaurants, cafes, cloud kitchens, hotel kitchens, food courts, and premium hospitality brands.",
+    rating: 4.7,
+    reviews: 164,
+    verified: true,
+    tags: ["Chef / Cook", "Waiter / Waitress", "Kitchen Helper", "Open Vacancies"],
+    country: "Kuwait",
+    language: "English",
+    companyType: "Hotels & Restaurants"
   },
   {
     id: 5,
-    company: "Kuwait Tech Solutions",
-    title: "Full Stack Developer - Fintech",
-    location: "Mirqab, Kuwait City",
-    salary: "KWD 1,600 - 2,400",
-    type: "IT & Security",
-    image:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=900&auto=format&fit=crop",
-    icon: <Code size={20} />,
+    name: "TechHire GCC",
+    logo: "TH",
+    category: "IT & digital jobs",
     description:
-      "Build modern fintech applications using React, Node.js, APIs, and secure backend services.",
-    benefits: [
-      "Competitive salary",
-      "Flexible hours",
-      "Performance bonus",
-      "Modern office",
-      "Professional development"
-    ],
-    requirements: [
-      "Computer Science degree",
-      "React and Node.js experience",
-      "Database knowledge",
-      "3+ years development experience"
-    ]
+      "Technology hiring for web developers, full stack developers, cybersecurity analysts, cloud support engineers, and digital marketing teams.",
+    rating: 4.8,
+    reviews: 156,
+    verified: true,
+    tags: ["Web Developer", "Full Stack Developer", "Digital Marketing Executive"],
+    country: "UAE",
+    language: "English",
+    companyType: "IT Companies"
   },
   {
     id: 6,
-    company: "Gulf Medical Center",
-    title: "Physiotherapist - Sports Medicine",
-    location: "Hawally, Kuwait",
-    salary: "KWD 1,200 - 1,800",
-    type: "Healthcare",
-    image:
-      "https://images.unsplash.com/photo-1530023367847-a683933f4172?q=80&w=900&auto=format&fit=crop",
-    icon: <Stethoscope size={20} />,
+    name: "Digital Talent Kuwait",
+    logo: "DTK",
+    category: "IT & digital jobs",
     description:
-      "Support patient rehabilitation, sports injury recovery, therapy planning, and performance improvement.",
-    benefits: [
-      "Health insurance",
-      "Modern facilities",
-      "Professional development",
-      "Sports clinic environment",
-      "Tax-free salary"
-    ],
-    requirements: [
-      "Physiotherapy degree",
-      "Valid license",
-      "2+ years experience",
-      "Sports rehabilitation knowledge"
-    ]
+      "Recruitment services for digital marketing, creative, social media, graphic design, web development, and IT support roles.",
+    rating: 4.6,
+    reviews: 119,
+    verified: true,
+    tags: ["Marketing Creative Head", "Social Media Executive", "Graphic Designer"],
+    country: "Kuwait",
+    language: "English",
+    companyType: "IT Companies"
   },
   {
     id: 7,
-    company: "Al Noor Hospital",
-    title: "Medical Laboratory Technician",
-    location: "Kuwait City",
-    salary: "KWD 850 - 1,200",
-    type: "Healthcare",
-    image:
-      "https://images.unsplash.com/photo-1581093458791-9d42e6e5f0fb?q=80&w=900&auto=format&fit=crop",
-    icon: <Stethoscope size={20} />,
+    name: "GCC Skilled Workforce",
+    logo: "GSW",
+    category: "Skilled manpower",
     description:
-      "Perform laboratory testing, sample handling, equipment maintenance, and diagnostic reporting support.",
-    benefits: [
-      "Health insurance",
-      "Paid leave",
-      "Transport allowance",
-      "Training support",
-      "Stable employment"
-    ],
-    requirements: [
-      "MLT qualification",
-      "Lab experience",
-      "Attention to detail",
-      "Valid professional documentation"
-    ]
+      "Skilled workforce sourcing for electricians, plumbers, HVAC technicians, welders, drivers, warehouse staff, and maintenance technicians.",
+    rating: 4.7,
+    reviews: 142,
+    verified: true,
+    tags: ["Electricians", "Plumbers", "HVAC Technicians", "Drivers"],
+    country: "Saudi Arabia",
+    language: "English",
+    companyType: "Construction Companies"
   },
   {
     id: 8,
-    company: "Bright Future School",
-    title: "Primary English Teacher",
-    location: "Fahaheel, Kuwait",
-    salary: "KWD 1,000 - 1,400",
-    type: "Education",
-    image:
-      "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=900&auto=format&fit=crop",
-    icon: <GraduationCap size={20} />,
+    name: "Facility Workforce Kuwait",
+    logo: "FWK",
+    category: "Skilled manpower",
     description:
-      "Deliver English curriculum to primary students in a supportive international school environment.",
-    benefits: [
-      "Housing allowance",
-      "Annual leave",
-      "Medical insurance",
-      "Professional development",
-      "Air ticket"
-    ],
-    requirements: [
-      "English or Education degree",
-      "Teaching certificate",
-      "2+ years experience",
-      "Strong communication skills"
-    ]
+      "Deployment-ready workforce solutions for facility management, warehouse operations, civil works, maintenance, logistics, and support functions.",
+    rating: 4.5,
+    reviews: 108,
+    verified: false,
+    tags: ["Facility Management Staff", "Warehouse Staff", "Maintenance Technicians"],
+    country: "Kuwait",
+    language: "English",
+    companyType: "Facility Management Companies"
   },
   {
     id: 9,
-    company: "CyberShield GCC",
-    title: "SOC Analyst - Level 1",
-    location: "Kuwait City",
-    salary: "KWD 1,100 - 1,700",
-    type: "IT & Security",
-    image:
-      "https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=900&auto=format&fit=crop",
-    icon: <Shield size={20} />,
+    name: "Education Careers Gulf",
+    logo: "ECG",
+    category: "Education & training",
     description:
-      "Monitor security alerts, analyze incidents, escalate threats, and support SOC operations.",
-    benefits: [
-      "Shift allowance",
-      "Certification support",
-      "Career growth",
-      "Health insurance",
-      "Performance incentives"
-    ],
-    requirements: [
-      "IT or cybersecurity degree",
-      "SOC knowledge",
-      "SIEM exposure",
-      "Analytical mindset"
-    ]
+      "Teacher recruitment and training coordination for schools, institutes, universities, and language training providers across GCC and Europe.",
+    rating: 4.6,
+    reviews: 97,
+    verified: true,
+    tags: ["English Teachers", "Science Teachers", "Mathematics Teachers"],
+    country: "Qatar",
+    language: "English",
+    companyType: "Schools & Universities"
   },
   {
     id: 10,
-    company: "Royal Gulf Hotel",
-    title: "Front Office Executive",
-    location: "Kuwait City",
-    salary: "KWD 450 - 750",
-    type: "Hospitality",
-    image:
-      "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=900&auto=format&fit=crop",
-    icon: <Coffee size={20} />,
+    name: "Language Faculty Desk",
+    logo: "LFD",
+    category: "Education & training",
     description:
-      "Handle guest check-ins, reservations, customer service, and front desk operations.",
-    benefits: [
-      "Accommodation",
-      "Meals",
-      "Uniform",
-      "Service charge",
-      "Medical insurance"
-    ],
-    requirements: [
-      "Hospitality experience",
-      "English communication",
-      "Customer service skills",
-      "Professional appearance"
-    ]
+      "Faculty recruitment support for English, French, Spanish, German language trainers, academic coordinators, and training delivery teams.",
+    rating: 4.8,
+    reviews: 88,
+    verified: true,
+    tags: ["English Teachers", "French Teachers", "German Language Trainers"],
+    country: "India",
+    language: "English",
+    companyType: "Schools & Universities"
   },
   {
     id: 11,
-    company: "Kuwait Logistics Co.",
-    title: "Warehouse Supervisor",
-    location: "Shuwaikh, Kuwait",
-    salary: "KWD 700 - 1,100",
-    type: "Logistics",
-    image:
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=900&auto=format&fit=crop",
-    icon: <Briefcase size={20} />,
+    name: "Salon Talent Kuwait",
+    logo: "STK",
+    category: "Salon & beauty",
     description:
-      "Manage warehouse operations, inventory movement, dispatch coordination, and team supervision.",
-    benefits: [
-      "Transport allowance",
-      "Overtime",
-      "Health insurance",
-      "Accommodation support",
-      "Annual leave"
-    ],
-    requirements: [
-      "Warehouse experience",
-      "Team management",
-      "Inventory knowledge",
-      "Basic computer skills"
-    ]
+      "Beauty and salon staffing for manicure specialists, pedicure specialists, hair stylists, spa therapists, beauticians, and salon assistants.",
+    rating: 4.7,
+    reviews: 74,
+    verified: true,
+    tags: ["Manicure Specialists", "Pedicure Specialists", "Beauticians"],
+    country: "Kuwait",
+    language: "English",
+    companyType: "Salon & Beauty Centres"
   },
   {
     id: 12,
-    company: "Urban Build Kuwait",
-    title: "Civil Site Engineer",
-    location: "Ahmadi, Kuwait",
-    salary: "KWD 1,000 - 1,600",
-    type: "Engineering",
-    image:
-      "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=900&auto=format&fit=crop",
-    icon: <Briefcase size={20} />,
+    name: "Beauty Workforce GCC",
+    logo: "BWG",
+    category: "Salon & beauty",
     description:
-      "Supervise site execution, coordinate contractors, monitor quality, and maintain project documentation.",
-    benefits: [
-      "Project allowance",
-      "Transport",
-      "Medical insurance",
-      "Career progression",
-      "Annual leave"
-    ],
-    requirements: [
-      "Civil Engineering degree",
-      "Site experience",
-      "AutoCAD knowledge",
-      "GCC experience preferred"
-    ]
+      "International beauty staff sourcing for premium salons, wellness centres, grooming studios, spa chains, and beauty service operators.",
+    rating: 4.5,
+    reviews: 61,
+    verified: false,
+    tags: ["Hair Stylists", "Spa Therapists", "Salon Assistants"],
+    country: "UAE",
+    language: "English",
+    companyType: "Salon & Beauty Centres"
   },
   {
     id: 13,
-    company: "Kuwait Finance Hub",
-    title: "Accountant",
-    location: "Sharq, Kuwait",
-    salary: "KWD 800 - 1,300",
-    type: "Finance",
-    image:
-      "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=900&auto=format&fit=crop",
-    icon: <Briefcase size={20} />,
+    name: "WorkVisa Support Centre",
+    logo: "WVS",
+    category: "Candidate services",
     description:
-      "Manage accounts, reconciliations, invoice processing, reporting, and monthly financial documentation.",
-    benefits: [
-      "Health insurance",
-      "Annual bonus",
-      "Professional development",
-      "Paid leave",
-      "Stable role"
-    ],
-    requirements: [
-      "Accounting degree",
-      "ERP experience",
-      "Excel skills",
-      "2+ years accounting experience"
-    ]
+      "Visa file preparation, documentation checklist, medical processing support, certificate coordination, travel readiness, and deployment tracking.",
+    rating: 4.7,
+    reviews: 134,
+    verified: true,
+    tags: ["Visa Documentation", "Document Collection", "Medical Processing"],
+    country: "Kuwait",
+    language: "English",
+    companyType: "General Trading Companies"
   },
   {
     id: 14,
-    company: "MedCare Kuwait",
-    title: "Radiology Technician",
-    location: "Salmiya, Kuwait",
-    salary: "KWD 900 - 1,400",
-    type: "Healthcare",
-    image:
-      "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=900&auto=format&fit=crop",
-    icon: <Stethoscope size={20} />,
+    name: "Document Attestation Desk",
+    logo: "DAD",
+    category: "Candidate services",
     description:
-      "Perform radiology procedures, prepare patients, maintain imaging equipment, and support diagnostic workflows.",
-    benefits: [
-      "Medical insurance",
-      "Housing support",
-      "Annual leave",
-      "Training",
-      "Tax-free salary"
-    ],
-    requirements: [
-      "Radiology qualification",
-      "Relevant license",
-      "Imaging experience",
-      "Patient care skills"
-    ]
+      "Candidate document collection, certificate attestation guidance, embassy coordination, medical file readiness, and employment file completion.",
+    rating: 4.4,
+    reviews: 52,
+    verified: false,
+    tags: ["Certificate Attestation", "Document Collection", "Pre-departure Briefing"],
+    country: "India",
+    language: "English",
+    companyType: "General Trading Companies"
   },
   {
     id: 15,
-    company: "Gulf Retail Group",
-    title: "Sales Executive",
-    location: "Avenues Mall, Kuwait",
-    salary: "KWD 400 - 750 + Commission",
-    type: "Sales",
-    image:
-      "https://images.unsplash.com/photo-1556745757-8d76bdb6984b?q=80&w=900&auto=format&fit=crop",
-    icon: <Users size={20} />,
+    name: "Employer Interview Hub",
+    logo: "EIH",
+    category: "Recruitment stage",
     description:
-      "Drive retail sales, customer engagement, product presentation, and store-level performance.",
-    benefits: [
-      "Commission",
-      "Incentives",
-      "Uniform",
-      "Training",
-      "Career growth"
-    ],
-    requirements: [
-      "Retail sales experience",
-      "Customer service",
-      "English communication",
-      "Target-driven mindset"
-    ]
+      "Interview coordination hub for employers, candidates, recruitment teams, shortlisting pipelines, offer follow-ups, and selection tracking.",
+    rating: 4.9,
+    reviews: 116,
+    verified: true,
+    tags: ["Employer Interview", "CV Shortlisting", "Offer Letter Stage"],
+    country: "Kuwait",
+    language: "English",
+    companyType: "Recruitment Partner"
   },
   {
     id: 16,
-    company: "CloudCore Technologies",
-    title: "Cloud Support Engineer",
-    location: "Kuwait City",
-    salary: "KWD 1,400 - 2,100",
-    type: "IT & Security",
-    image:
-      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=900&auto=format&fit=crop",
-    icon: <Code size={20} />,
+    name: "Deployment Readiness Centre",
+    logo: "DRC",
+    category: "Recruitment stage",
     description:
-      "Support cloud infrastructure, troubleshoot deployments, manage tickets, and assist enterprise clients.",
-    benefits: [
-      "Certification support",
-      "Hybrid work",
-      "Health insurance",
-      "Bonus",
-      "Career development"
-    ],
-    requirements: [
-      "Cloud knowledge",
-      "AWS/Azure basics",
-      "Linux skills",
-      "Customer support mindset"
-    ]
+      "Candidate deployment readiness checks covering documentation, medical, visa, travel, employer reporting, onboarding, and joining coordination.",
+    rating: 4.8,
+    reviews: 102,
+    verified: true,
+    tags: ["Deployment Ready", "Visa Processing", "Travel Coordination"],
+    country: "Kuwait",
+    language: "English",
+    companyType: "Recruitment Partner"
   },
   {
     id: 17,
-    company: "Premier Academy Kuwait",
-    title: "Mathematics Teacher",
-    location: "Hawally, Kuwait",
-    salary: "KWD 1,100 - 1,500",
-    type: "Education",
-    image:
-      "https://images.unsplash.com/photo-1513258496099-48168024aec0?q=80&w=900&auto=format&fit=crop",
-    icon: <GraduationCap size={20} />,
+    name: "Germany Ausbildung Desk",
+    logo: "GAD",
+    category: "Education & training",
     description:
-      "Teach mathematics, prepare lesson plans, assess student progress, and support academic development.",
-    benefits: [
-      "Housing allowance",
-      "Health insurance",
-      "Annual tickets",
-      "Paid leave",
-      "Training"
-    ],
-    requirements: [
-      "Mathematics degree",
-      "Teaching certificate",
-      "2+ years experience",
-      "Curriculum knowledge"
-    ]
+      "Ausbildung pathway support with German language readiness, interview preparation, documentation, employer coordination, and mobility guidance.",
+    rating: 4.8,
+    reviews: 145,
+    verified: true,
+    tags: ["German Language Trainers", "Training Coordinators", "Visa Documentation"],
+    country: "Germany",
+    language: "German",
+    companyType: "Schools & Universities"
   },
   {
     id: 18,
-    company: "Kuwait Facility Services",
-    title: "Maintenance Technician",
-    location: "Farwaniya, Kuwait",
-    salary: "KWD 350 - 600",
-    type: "Skilled Labor",
-    image:
-      "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=900&auto=format&fit=crop",
-    icon: <Briefcase size={20} />,
+    name: "Gulf Employer Network",
+    logo: "GEN",
+    category: "Skilled manpower",
     description:
-      "Perform building maintenance, equipment checks, repair coordination, and facility support tasks.",
-    benefits: [
-      "Accommodation",
-      "Transport",
-      "Overtime",
-      "Medical",
-      "Annual leave"
-    ],
-    requirements: [
-      "Maintenance experience",
-      "Basic electrical/plumbing skills",
-      "Safety awareness",
-      "Teamwork"
+      "Employer network for high-demand manpower categories across Kuwait, UAE, Saudi Arabia, Qatar, Bahrain, Oman, and wider GCC markets.",
+    rating: 4.6,
+    reviews: 91,
+    verified: true,
+    tags: ["Open Vacancies", "Drivers", "Facility Management Staff"],
+    country: "Oman",
+    language: "Arabic",
+    companyType: "General Trading Companies"
+  }
+];
+
+const filterGroups = [
+  {
+    key: "tags",
+    title: "Healthcare recruitment",
+    options: [
+      { label: "Nurses", count: 56 },
+      { label: "Physiotherapists", count: 28 },
+      { label: "Radiology Technicians", count: 18 },
+      { label: "Medical Laboratory Technicians", count: 22 },
+      { label: "Dental Assistants", count: 12 },
+      { label: "Caregivers", count: 40 },
+      { label: "Hospital Support Staff", count: 31 }
     ]
   },
   {
-    id: 19,
-    company: "FoodWorks Kuwait",
-    title: "Restaurant Supervisor",
-    location: "Salmiya, Kuwait",
-    salary: "KWD 500 - 850",
-    type: "Hospitality",
-    image:
-      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=900&auto=format&fit=crop",
-    icon: <Coffee size={20} />,
-    description:
-      "Supervise restaurant operations, service quality, staff schedules, and customer satisfaction.",
-    benefits: [
-      "Meals",
-      "Service charge",
-      "Accommodation",
-      "Medical insurance",
-      "Growth opportunities"
-    ],
-    requirements: [
-      "Restaurant experience",
-      "Team supervision",
-      "Customer service",
-      "English communication"
+    key: "tags",
+    title: "Hospitality & restaurant",
+    options: [
+      { label: "Barista", count: 35 },
+      { label: "Kitchen Helper", count: 42 },
+      { label: "Chef / Cook", count: 26 },
+      { label: "Waiter / Waitress", count: 38 },
+      { label: "Restaurant Supervisor", count: 14 },
+      { label: "Front Office Executive", count: 11 },
+      { label: "Housekeeping Staff", count: 30 },
+      { label: "Hotel Operations Staff", count: 19 }
     ]
   },
   {
-    id: 20,
-    company: "Digital Defense Kuwait",
-    title: "Network Security Engineer",
-    location: "Kuwait City",
-    salary: "KWD 1,700 - 2,600",
-    type: "IT & Security",
-    image:
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=900&auto=format&fit=crop",
-    icon: <Shield size={20} />,
-    description:
-      "Design and manage network security controls, firewalls, vulnerability remediation, and secure connectivity.",
-    benefits: [
-      "High salary package",
-      "Certifications",
-      "Performance bonus",
-      "Health insurance",
-      "Career track"
-    ],
-    requirements: [
-      "Network security experience",
-      "Firewall knowledge",
-      "CCNA/CCNP preferred",
-      "Security operations exposure"
+    key: "tags",
+    title: "IT & digital jobs",
+    options: [
+      { label: "Web Developer", count: 18 },
+      { label: "Full Stack Developer", count: 12 },
+      { label: "Digital Marketing Executive", count: 24 },
+      { label: "Marketing Creative Head", count: 9 },
+      { label: "Cybersecurity Analyst", count: 7 },
+      { label: "Cloud Support Engineer", count: 6 },
+      { label: "IT Support Technician", count: 20 },
+      { label: "Graphic Designer", count: 16 },
+      { label: "Social Media Executive", count: 21 }
     ]
   },
   {
-    id: 21,
-    company: "Al Safat Business Services",
-    title: "HR Coordinator",
-    location: "Kuwait City",
-    salary: "KWD 650 - 950",
-    type: "Administration",
-    image:
-      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=900&auto=format&fit=crop",
-    icon: <Building2 size={20} />,
-    description:
-      "Support recruitment coordination, onboarding, employee files, attendance, and HR administration.",
-    benefits: [
-      "Office role",
-      "Health insurance",
-      "Paid leave",
-      "Professional growth",
-      "Stable schedule"
-    ],
-    requirements: [
-      "HR or business degree",
-      "Admin experience",
-      "Communication skills",
-      "MS Office knowledge"
+    key: "tags",
+    title: "Skilled manpower",
+    options: [
+      { label: "Electricians", count: 44 },
+      { label: "Plumbers", count: 37 },
+      { label: "HVAC Technicians", count: 29 },
+      { label: "Welders", count: 33 },
+      { label: "Civil Workers", count: 48 },
+      { label: "Maintenance Technicians", count: 25 },
+      { label: "Drivers", count: 52 },
+      { label: "Warehouse Staff", count: 31 },
+      { label: "Facility Management Staff", count: 27 }
     ]
   },
   {
-    id: 22,
-    company: "Gulf Engineering Consultants",
-    title: "Mechanical Engineer",
-    location: "Fahaheel, Kuwait",
-    salary: "KWD 1,100 - 1,700",
-    type: "Engineering",
-    image:
-      "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=900&auto=format&fit=crop",
-    icon: <Briefcase size={20} />,
-    description:
-      "Support mechanical design, installation review, site coordination, and project quality documentation.",
-    benefits: [
-      "Project allowance",
-      "Medical insurance",
-      "Transport",
-      "Annual leave",
-      "Career growth"
-    ],
-    requirements: [
-      "Mechanical Engineering degree",
-      "Site/project experience",
-      "Drawing review skills",
-      "GCC experience preferred"
+    key: "tags",
+    title: "Education & training",
+    options: [
+      { label: "English Teachers", count: 15 },
+      { label: "French Teachers", count: 6 },
+      { label: "Spanish Teachers", count: 5 },
+      { label: "German Language Trainers", count: 11 },
+      { label: "Primary Teachers", count: 18 },
+      { label: "Science Teachers", count: 9 },
+      { label: "Mathematics Teachers", count: 12 },
+      { label: "Training Coordinators", count: 7 }
     ]
   },
   {
-    id: 23,
-    company: "Kuwait Customer Care Centre",
-    title: "Customer Service Representative",
-    location: "Kuwait City",
-    salary: "KWD 350 - 600",
-    type: "Customer Service",
-    image:
-      "https://images.unsplash.com/photo-1553484771-371a605b060b?q=80&w=900&auto=format&fit=crop",
-    icon: <Users size={20} />,
-    description:
-      "Handle inbound customer queries, service requests, follow-ups, and customer satisfaction support.",
-    benefits: [
-      "Training",
-      "Incentives",
-      "Medical insurance",
-      "Career progression",
-      "Stable shifts"
-    ],
-    requirements: [
-      "Good communication",
-      "Customer handling skills",
-      "Basic computer knowledge",
-      "English required"
+    key: "tags",
+    title: "Salon & beauty",
+    options: [
+      { label: "Manicure Specialists", count: 16 },
+      { label: "Pedicure Specialists", count: 16 },
+      { label: "Hair Stylists", count: 11 },
+      { label: "Beauticians", count: 20 },
+      { label: "Spa Therapists", count: 8 },
+      { label: "Salon Assistants", count: 13 }
     ]
   },
   {
-    id: 24,
-    company: "Kuwait Petroleum Services",
-    title: "HSE Officer",
-    location: "Ahmadi, Kuwait",
-    salary: "KWD 900 - 1,500",
-    type: "Oil & Gas",
-    image:
-      "https://images.unsplash.com/photo-1518709268805-4e9042af2176?q=80&w=900&auto=format&fit=crop",
-    icon: <Shield size={20} />,
-    description:
-      "Monitor safety compliance, conduct inspections, report incidents, and support workplace safety programs.",
-    benefits: [
-      "Site allowance",
-      "Transport",
-      "Health insurance",
-      "Annual leave",
-      "Training"
-    ],
-    requirements: [
-      "HSE certification",
-      "NEBOSH preferred",
-      "Site safety experience",
-      "Strong reporting skills"
+    key: "country",
+    title: "Destination country",
+    options: [
+      { label: "Kuwait", count: 76 },
+      { label: "UAE", count: 42 },
+      { label: "Saudi Arabia", count: 38 },
+      { label: "Qatar", count: 24 },
+      { label: "Bahrain", count: 11 },
+      { label: "Oman", count: 19 },
+      { label: "Germany", count: 35 },
+      { label: "Europe", count: 29 }
+    ]
+  },
+  {
+    key: "companyType",
+    title: "Employer type",
+    options: [
+      { label: "Hospitals & Clinics", count: 22 },
+      { label: "Hotels & Restaurants", count: 31 },
+      { label: "General Trading Companies", count: 18 },
+      { label: "Construction Companies", count: 27 },
+      { label: "Facility Management Companies", count: 21 },
+      { label: "IT Companies", count: 13 },
+      { label: "Schools & Universities", count: 15 },
+      { label: "Salon & Beauty Centres", count: 9 },
+      { label: "Recruitment Partner", count: 12 }
+    ]
+  },
+  {
+    key: "tags",
+    title: "Candidate services",
+    options: [
+      { label: "CV Screening", count: 56 },
+      { label: "Interview Coordination", count: 48 },
+      { label: "Document Collection", count: 52 },
+      { label: "Certificate Attestation", count: 33 },
+      { label: "Medical Processing", count: 29 },
+      { label: "Visa Documentation", count: 46 },
+      { label: "Travel Coordination", count: 21 },
+      { label: "Pre-departure Briefing", count: 18 }
+    ]
+  },
+  {
+    key: "tags",
+    title: "Recruitment stage",
+    options: [
+      { label: "Open Vacancies", count: 86 },
+      { label: "CV Shortlisting", count: 54 },
+      { label: "Employer Interview", count: 42 },
+      { label: "Offer Letter Stage", count: 28 },
+      { label: "Documentation Stage", count: 36 },
+      { label: "Visa Processing", count: 31 },
+      { label: "Deployment Ready", count: 19 },
+      { label: "Closed Positions", count: 12 }
+    ]
+  },
+  {
+    key: "language",
+    title: "Preferred language",
+    options: [
+      { label: "English", count: 88 },
+      { label: "Hindi", count: 42 },
+      { label: "Tamil", count: 35 },
+      { label: "Malayalam", count: 28 },
+      { label: "Arabic", count: 17 },
+      { label: "German", count: 12 }
     ]
   }
 ];
 
-const faqs = [
-  {
-    q: "What types of jobs does Antalya Manpower offer in Kuwait?",
-    a: "Antalya supports recruitment across Healthcare, Education, Hospitality, IT & Cybersecurity, Skilled Labor, Administration, and related professional sectors."
-  },
-  {
-    q: "How do I apply for a job through Antalya Manpower?",
-    a: "You can apply by submitting your CV, selecting a matching role, and completing the screening process with our recruitment team."
-  },
-  {
-    q: "What are the requirements for working in Kuwait?",
-    a: "Requirements depend on the role, but usually include education certificates, experience documents, passport, medical clearance, and employer-specific eligibility."
-  },
-  {
-    q: "Do you offer visa sponsorship for international candidates?",
-    a: "Visa sponsorship depends on the employer and role. Our team will guide shortlisted candidates through employer confirmation, documentation, and mobility steps."
-  },
-  {
-    q: "What industries do you specialize in?",
-    a: "Our core sectors include Healthcare, Education, Hospitality, IT & Cybersecurity, Skilled Labor, Facility Management, and Administration."
-  },
-  {
-    q: "How long does the recruitment process typically take?",
-    a: "Timelines vary by employer, sector, document readiness, and visa process. Shortlisted candidates are guided stage by stage."
-  },
-  {
-    q: "What benefits can I expect in a Kuwaiti job?",
-    a: "Benefits can include salary, accommodation or housing allowance, medical insurance, annual leave, travel benefits, and employer-specific perks."
-  }
-];
+function getProviderField(provider, key) {
+  if (key === "tags") return provider.tags;
+  return provider[key];
+}
 
-const industries = [
-  {
-    name: "Healthcare",
-    icon: <Stethoscope size={68} strokeWidth={1.7} />,
-    image:
-      "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1200&auto=format&fit=crop",
-    overlay: "bg-[#0658d4]/65"
-  },
-  {
-    name: "IT & Cybersecurity",
-    icon: <Shield size={68} strokeWidth={1.7} />,
-    image:
-      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200&auto=format&fit=crop",
-    overlay: "bg-black/45"
-  },
-  {
-    name: "Education",
-    icon: <GraduationCap size={72} strokeWidth={1.7} />,
-    image:
-      "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop",
-    overlay: "bg-black/35"
-  },
-  {
-    name: "Hospitality",
-    icon: <Coffee size={70} strokeWidth={1.7} />,
-    image:
-      "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format&fit=crop",
-    overlay: "bg-black/35"
-  },
-  {
-    name: "Skilled Labor",
-    icon: <Users size={70} strokeWidth={1.7} />,
-    image:
-      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1200&auto=format&fit=crop",
-    overlay: "bg-black/45"
-  },
-  {
-    name: "Administration",
-    icon: <Building2 size={70} strokeWidth={1.7} />,
-    image:
-      "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1200&auto=format&fit=crop",
-    overlay: "bg-[#0658d4]/55"
-  },
-  {
-    name: "Sales",
-    icon: <Briefcase size={70} strokeWidth={1.7} />,
-    image:
-      "https://images.unsplash.com/photo-1556745757-8d76bdb6984b?q=80&w=1200&auto=format&fit=crop",
-    overlay: "bg-[#0658d4]/55"
-  }
-];
+function matchesFilter(provider, selectedFilters) {
+  return Object.entries(selectedFilters).every(([key, values]) => {
+    if (!values.length) return true;
 
-const adviceLinks = [
-  {
-    title: "CV Templates",
-    desc: "Create a stronger CV using practical recruiter-backed guidance.",
-    icon: <FileText size={28} />
-  },
-  {
-    title: "Interview Questions",
-    desc: "Prepare for employer interviews with role-specific practice questions.",
-    icon: <MessageCircle size={28} />
-  },
-  {
-    title: "Assessment Centres",
-    desc: "Understand screening, selection rounds, and employer evaluation methods.",
-    icon: <ClipboardCheck size={28} />
-  },
-  {
-    title: "Industry Profiles",
-    desc: "Browse detailed sector profiles tailored to your career pathway.",
-    icon: <Briefcase size={28} />
-  },
-  {
-    title: "How To Find a Job",
-    desc: "Discover smart strategies to navigate the Kuwait and GCC job market.",
-    icon: <Search size={28} />
-  },
-  {
-    title: "Employment Rights",
-    desc: "Know the basics of contracts, pay, benefits, and worker protections.",
-    icon: <Scale size={28} />
-  }
-];
+    const field = getProviderField(provider, key);
 
-function JobCard({ job, selectedJob, setSelectedJob }) {
+    if (Array.isArray(field)) {
+      return values.some((value) => field.includes(value));
+    }
+
+    return values.includes(field);
+  });
+}
+
+function ProviderCard({ provider, saved, compared, onSave, onCompare }) {
   return (
-    <div
-      onClick={() => setSelectedJob(job)}
-      className={`group cursor-pointer rounded-2xl border bg-white p-6 transition-all duration-300 hover:shadow-xl ${
-        selectedJob.id === job.id
-          ? "border-[#0658d4] ring-2 ring-[#0658d4]/15"
-          : "border-gray-200"
-      }`}
-    >
-      <div className="flex min-h-[110px] gap-5">
-        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-tl-full rounded-bl-full bg-gray-100 text-[#d9d9d9]">
-          {job.icon}
-        </div>
+    <article className="flex min-h-[258px] flex-col justify-between rounded-[8px] border border-[#cfd4dc] bg-white px-6 py-7 transition hover:border-[#0065f2] hover:shadow-[0_3px_10px_rgba(16,24,40,0.08)]">
+      <div>
+        <div className="flex items-center gap-4">
+          <div className="relative flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-[3px] border border-[#cfd4dc] bg-white text-[10px] font-bold text-[#0065f2]">
+            {provider.logo}
 
-        <div>
-          <p className="mb-2 text-base font-medium text-[#202533]">
-            {job.company}
-          </p>
-
-          <h3 className="line-clamp-2 text-[22px] font-medium leading-[1.15] tracking-[-0.02em] text-[#202533]">
-            {job.title}
-          </h3>
-        </div>
-      </div>
-
-      <div className="mt-6 border-t border-gray-200 pt-5">
-        <div className="flex items-center justify-between gap-3 text-sm font-medium text-[#48515f]">
-          <div className="flex flex-wrap gap-4">
-            <span className="flex items-center gap-1.5">
-              <MapPin size={15} className="text-[#5b6877]" />
-              {job.location}
-            </span>
-
-            <span className="flex items-center gap-1.5">
-              <Briefcase size={15} className="text-[#5b6877]" />
-              {job.salary}
-            </span>
+            {provider.verified && (
+              <span className="absolute -right-2 -top-2 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-[#0065f2] text-white">
+                <ShieldCheck size={12} />
+              </span>
+            )}
           </div>
 
-          <ChevronRight size={22} className="shrink-0 text-[#5b6877] transition-transform group-hover:translate-x-1 group-hover:text-[#0658d4]" />
+          <h3 className="text-[16px] font-bold leading-tight text-[#101828]">
+            {provider.name}
+          </h3>
         </div>
-      </div>
-    </div>
-  );
-}
 
-function FAQSection() {
-  const [openIndex, setOpenIndex] = useState(null);
-
-  return (
-    <section className="bg-[#f4f4f4] px-6 py-24 font-['Inter',sans-serif] md:py-32">
-      <div className="mx-auto max-w-[980px] text-center">
-        <h2 className="text-5xl font-black leading-tight tracking-[-0.055em] text-black md:text-6xl lg:text-[72px]">
-          Graduate jobs FAQs
-        </h2>
-
-        <p className="mx-auto mt-5 max-w-3xl text-[24px] leading-[1.2] tracking-[-0.02em] text-[#202533] md:text-[30px]">
-          Find clear answers to common questions about jobs in Kuwait and how
-          Antalya can support your job search.
+        <p className="mt-7 line-clamp-3 min-h-[76px] text-[18px] leading-[1.32] text-[#273142]">
+          {provider.description}
         </p>
+      </div>
 
-        <div className="mt-20 text-left">
-          {faqs.map((item, index) => (
-            <div key={item.q} className="border-b border-gray-300">
-              <button
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="flex w-full items-center justify-between gap-6 py-8 text-left"
-              >
-                <span className="text-[24px] font-normal tracking-[-0.02em] text-[#202533] md:text-[30px]">
-                  {item.q}
-                </span>
-
-                {openIndex === index ? (
-                  <Minus size={24} className="shrink-0 text-[#202533]" />
-                ) : (
-                  <Plus size={24} className="shrink-0 text-[#202533]" />
-                )}
-              </button>
-
-              {openIndex === index && (
-                <p className="max-w-3xl pb-8 text-[18px] leading-[1.6] text-[#48515f]">
-                  {item.a}
-                </p>
-              )}
-            </div>
-          ))}
+      <div className="mt-8 flex items-center justify-between">
+        <div className="flex items-center gap-1 text-[17px] font-bold text-[#101828]">
+          <Star size={18} className="fill-[#d6dc00] text-[#d6dc00]" />
+          {provider.rating.toFixed(1)}
+          <span className="font-semibold">({provider.reviews})</span>
         </div>
 
-        <div className="mt-14">
-          <p className="mb-6 text-[22px] font-medium text-[#202533]">
-            Ready to take the next step?
-          </p>
+        <div className="flex items-center gap-6 text-[15px] font-bold text-[#101828]">
+          <button
+            type="button"
+            onClick={() => onSave(provider.id)}
+            className={`flex items-center gap-1 hover:text-[#0065f2] ${
+              saved ? "text-[#0065f2]" : ""
+            }`}
+          >
+            <Bookmark size={18} className={saved ? "fill-[#0065f2]" : ""} />
+            Save
+          </button>
 
-          <button className="rounded-full bg-[#0658d4] px-10 py-5 text-lg font-bold text-white transition-all hover:bg-[#0547aa]">
-            Register free
+          <button
+            type="button"
+            onClick={() => onCompare(provider.id)}
+            className={compared ? "text-[#0065f2]" : "hover:text-[#0065f2]"}
+            aria-label="Compare"
+          >
+            <ArrowLeftRight size={18} />
           </button>
         </div>
-      </div>
-    </section>
-  );
-}
-
-function IndustryCard({ industry }) {
-  return (
-    <article className="group relative h-[430px] min-w-[390px] cursor-pointer overflow-hidden rounded-[26px] bg-gray-200 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl md:min-w-[520px]">
-      <img
-        src={industry.image}
-        alt={industry.name}
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-      />
-
-      <div className={`absolute inset-0 ${industry.overlay}`}></div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
-
-      <div className="absolute bottom-10 left-8 right-8 text-white">
-        <div className="mb-4 text-white">{industry.icon}</div>
-
-        <h3 className="text-[34px] font-black leading-[0.95] tracking-[-0.04em] md:text-[38px]">
-          {industry.name}
-        </h3>
       </div>
     </article>
   );
 }
 
-function IndustryCarousel() {
-  const industryRef = useRef(null);
-
-  useEffect(() => {
-    const slider = industryRef.current;
-    if (!slider) return;
-
-    const interval = setInterval(() => {
-      const maxScroll = slider.scrollWidth - slider.clientWidth;
-
-      if (slider.scrollLeft >= maxScroll - 10) {
-        slider.scrollTo({ left: 0, behavior: "smooth" });
-      } else {
-        slider.scrollBy({ left: 520, behavior: "smooth" });
-      }
-    }, 3500);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const scrollLeft = () => {
-    industryRef.current?.scrollBy({ left: -560, behavior: "smooth" });
-  };
-
-  const scrollRight = () => {
-    industryRef.current?.scrollBy({ left: 560, behavior: "smooth" });
-  };
-
-  return (
-    <section className="relative overflow-hidden bg-[#f4f4f4] px-6 py-24 font-['Inter',sans-serif] md:py-32">
-      <div className="mx-auto mb-16 max-w-5xl text-center">
-        <h2 className="text-5xl font-black leading-tight tracking-[-0.055em] text-black md:text-6xl lg:text-[64px]">
-          Explore graduate jobs by industry
-        </h2>
-
-        <p className="mx-auto mt-5 max-w-4xl text-[24px] font-normal leading-[1.18] tracking-[-0.02em] text-[#202533] md:text-[30px]">
-          Not sure what to search for next? Browse popular job sectors to
-          discover roles that match your interests and background.
-        </p>
-      </div>
-
-      <div className="relative">
-        <button
-          onClick={scrollLeft}
-          className="absolute left-3 top-1/2 z-20 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-black/25 text-white backdrop-blur-md transition-all hover:bg-[#0658d4]"
-          aria-label="Previous industry"
-        >
-          <ChevronLeft size={36} strokeWidth={3} />
-        </button>
-
-        <button
-          onClick={scrollRight}
-          className="absolute right-3 top-1/2 z-20 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-black/25 text-white backdrop-blur-md transition-all hover:bg-[#0658d4]"
-          aria-label="Next industry"
-        >
-          <ChevronRightIcon size={36} strokeWidth={3} />
-        </button>
-
-        <div
-          ref={industryRef}
-          className="scrollbar-hide flex gap-24 overflow-x-auto scroll-smooth px-[8vw] pb-6"
-        >
-          {industries.map((industry) => (
-            <IndustryCard key={industry.name} industry={industry} />
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-16 flex justify-center">
-        <button className="group flex items-center gap-2 rounded-full bg-[#0658d4] px-10 py-5 text-lg font-bold text-white transition-all hover:bg-[#0547aa]">
-          All industries
-          <ArrowRight
-            size={20}
-            className="transition-transform group-hover:translate-x-1"
-          />
-        </button>
-      </div>
-    </section>
-  );
-}
-
-function CareerAdviceSection() {
-  return (
-    <section className="bg-white px-6 py-24 font-['Inter',sans-serif] md:py-32">
-      <div className="mx-auto max-w-[1320px]">
-        <h2 className="text-5xl font-black leading-tight tracking-[-0.055em] text-black md:text-6xl lg:text-[62px]">
-          Expert career advice for job seekers
-        </h2>
-
-        <div className="mt-9 border-t-2 border-black pt-8">
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_2fr]">
-            <div>
-              <p className="max-w-[420px] text-[24px] font-medium leading-[1.25] tracking-[-0.02em] text-black md:text-[28px]">
-                Practical guidance to help you write stronger CVs, prepare for
-                interviews, and confidently apply for jobs in Kuwait.
-              </p>
-
-              <button className="mt-8 flex items-center gap-2 rounded-full bg-[#0658d4] px-9 py-4 text-lg font-bold text-white transition-all hover:bg-[#0547aa]">
-                All career advice
-                <BookOpen size={18} />
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 gap-x-16 gap-y-10 md:grid-cols-2">
-              {adviceLinks.map((item) => (
-                <a
-                  key={item.title}
-                  href="/career-advice"
-                  className="group grid grid-cols-[1fr_auto] gap-6"
-                >
-                  <div>
-                    <h3 className="text-[26px] font-medium tracking-[-0.03em] text-black">
-                      {item.title}
-                    </h3>
-
-                    <p className="mt-3 max-w-[360px] text-[16px] leading-[1.45] text-[#202533]">
-                      {item.desc}
-                    </p>
-                  </div>
-
-                  <ArrowRight
-                    size={44}
-                    strokeWidth={2.5}
-                    className="mt-1 text-[#0658d4] transition-transform group-hover:translate-x-2"
-                  />
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export default function GraduateJobsPage() {
-  const [selectedJob, setSelectedJob] = useState(jobs[0]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate();
-
-  const filteredJobs = jobs.filter(
-    (job) =>
-      job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.type.toLowerCase().includes(searchTerm.toLowerCase())
+function FilterGroup({ group, selectedFilters, setSelectedFilters }) {
+  const [open, setOpen] = useState(
+    group.title === "Healthcare recruitment" ||
+      group.title === "Hospitality & restaurant" ||
+      group.title === "IT & digital jobs"
   );
 
-  const handleViewJob = () => {
-    const safeJobData = {
-      id: selectedJob.id,
-      company: selectedJob.company,
-      title: selectedJob.title,
-      location: selectedJob.location,
-      salary: selectedJob.salary,
-      type: selectedJob.type,
-      image: selectedJob.image,
-      description: selectedJob.description,
-      benefits: selectedJob.benefits,
-      requirements: selectedJob.requirements
-    };
+  const selectedValues = selectedFilters[group.key] || [];
 
-    navigate("/jdpage", {
-      state: {
-        job: safeJobData
-      }
+  const selectedInsideGroup = group.options.filter((option) =>
+    selectedValues.includes(option.label)
+  );
+
+  const toggleOption = (optionLabel) => {
+    setSelectedFilters((previous) => {
+      const current = previous[group.key] || [];
+      const exists = current.includes(optionLabel);
+
+      return {
+        ...previous,
+        [group.key]: exists
+          ? current.filter((item) => item !== optionLabel)
+          : [...current, optionLabel]
+      };
     });
   };
 
+  const clearGroup = () => {
+    setSelectedFilters((previous) => ({
+      ...previous,
+      [group.key]: previous[group.key].filter(
+        (item) => !group.options.some((option) => option.label === item)
+      )
+    }));
+  };
+
   return (
-    <div className="min-h-screen bg-[#f4f4f4] pt-20 font-['Inter',sans-serif] text-[#202533] md:pt-24">
-      {/* SECTION 1: HEADER */}
-      <section className="border-l-[4px] border-[#0658d4] bg-white">
-        <div className="mx-auto max-w-[1800px] px-6 py-5">
-          <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
-            <div>
-              <h1 className="text-[32px] font-black leading-tight tracking-[-0.04em] text-black md:text-[42px]">
-                Graduate jobs search
-              </h1>
+    <div className="border-b border-[#d4d8df] py-[22px]">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="flex w-full items-start justify-between gap-5 text-left"
+      >
+        <span>
+          <span className="block text-[18px] font-bold leading-[1.2] text-[#101828]">
+            {group.title}
+          </span>
 
-              <p className="mt-2 text-[17px] leading-snug text-[#202533]">
-                Search and discover exclusive jobs tailored to your career goals.
-              </p>
+          <span className="mt-[5px] block text-[16px] leading-none text-[#344054]">
+            {selectedInsideGroup.length
+              ? `${selectedInsideGroup.length} selected`
+              : "all"}
+          </span>
+        </span>
 
-              <button className="mt-2 flex items-center gap-1 text-[16px] font-medium text-[#202533]">
-                Learn more
-                <ChevronDown size={17} />
-              </button>
-            </div>
+        <ChevronDown
+          size={24}
+          className={`shrink-0 text-[#0065f2] transition ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
 
-            <div className="text-sm font-medium text-[#202533]">
-              <span className="font-bold text-[#0658d4]">Home</span>
-              <span className="mx-1">»</span>
-              Graduate Jobs
-            </div>
-          </div>
+      {open && (
+        <div className="mt-5 space-y-[14px]">
+          <button
+            type="button"
+            onClick={clearGroup}
+            className="text-[15px] text-[#8a94a6] underline underline-offset-2 hover:text-[#0065f2]"
+          >
+            Clear selection
+          </button>
+
+          {group.options.map((option) => {
+            const checked = selectedValues.includes(option.label);
+
+            return (
+              <label
+                key={option.label}
+                className="flex cursor-pointer items-start gap-3 text-[17px] leading-[1.25] text-[#101828]"
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleOption(option.label)}
+                  className={`mt-[2px] flex h-[25px] w-[25px] shrink-0 items-center justify-center border ${
+                    checked
+                      ? "border-[#0057ff] bg-[#0057ff] text-white"
+                      : option.count === 0
+                      ? "border-[#aeb4bd] bg-white"
+                      : "border-[#667085] bg-white"
+                  }`}
+                >
+                  {checked && <Check size={17} />}
+                </button>
+
+                <span className={option.count === 0 ? "text-[#475467]" : ""}>
+                  {option.label}{" "}
+                  <span className="text-[#8a94a6]">({option.count})</span>
+                </span>
+              </label>
+            );
+          })}
         </div>
-      </section>
+      )}
+    </div>
+  );
+}
 
-      {/* SECTION 2: FILTER BAR */}
-      <section className="border-l-[4px] border-[#0658d4] bg-white">
-        <div className="mx-auto flex max-w-[1800px] flex-col gap-5 border-t border-gray-100 px-6 py-7 lg:flex-row lg:items-center">
-          <div className="flex flex-wrap items-center gap-4">
-            <button className="flex items-center gap-3 rounded-full bg-[#0658d4] px-8 py-4 text-[18px] font-bold text-white">
-              Filters
-              <SlidersHorizontal size={18} />
-            </button>
+export default function Searchpage() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedFilters, setSelectedFilters] = useState({
+    tags: ["Nurses"],
+    category: [],
+    country: [],
+    companyType: [],
+    language: []
+  });
 
-            <span className="text-[18px] font-medium text-[#202533]">
-              {filteredJobs.length} job matches
-            </span>
+  const [sortBy] = useState("reviews");
+  const [page, setPage] = useState(1);
+  const [savedProviders, setSavedProviders] = useState([]);
+  const [comparedProviders, setComparedProviders] = useState([]);
 
-            <button
-              onClick={() => setSearchTerm("")}
-              className="rounded-xl bg-gray-200 px-4 py-2 text-sm font-medium text-[#202533]"
-            >
-              Reset
-            </button>
+  const pageSize = 12;
+
+  const selectedFilterChips = useMemo(() => {
+    return Object.entries(selectedFilters).flatMap(([key, values]) =>
+      values.map((value) => ({ key, value }))
+    );
+  }, [selectedFilters]);
+
+  const filteredProviders = useMemo(() => {
+    const searched = providers.filter((provider) => {
+      const searchText = `
+        ${provider.name}
+        ${provider.category}
+        ${provider.description}
+        ${provider.tags.join(" ")}
+        ${provider.country}
+        ${provider.language}
+        ${provider.companyType}
+      `.toLowerCase();
+
+      return searchText.includes(searchTerm.toLowerCase());
+    });
+
+    const filtered = searched.filter((provider) =>
+      matchesFilter(provider, selectedFilters)
+    );
+
+    return [...filtered].sort((a, b) => {
+      if (sortBy === "reviews") return b.reviews - a.reviews;
+      if (sortBy === "rating") return b.rating - a.rating;
+      if (sortBy === "name") return a.name.localeCompare(b.name);
+      return 0;
+    });
+  }, [searchTerm, selectedFilters, sortBy]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredProviders.length / pageSize));
+
+  const paginatedProviders = filteredProviders.slice(
+    (page - 1) * pageSize,
+    page * pageSize
+  );
+
+  const clearAllFilters = () => {
+    setSelectedFilters({
+      tags: [],
+      category: [],
+      country: [],
+      companyType: [],
+      language: []
+    });
+    setSearchTerm("");
+    setPage(1);
+  };
+
+  const removeChip = (chip) => {
+    setSelectedFilters((previous) => ({
+      ...previous,
+      [chip.key]: previous[chip.key].filter((item) => item !== chip.value)
+    }));
+    setPage(1);
+  };
+
+  const toggleSave = (id) => {
+    setSavedProviders((previous) =>
+      previous.includes(id)
+        ? previous.filter((item) => item !== id)
+        : [...previous, id]
+    );
+  };
+
+  const toggleCompare = (id) => {
+    setComparedProviders((previous) =>
+      previous.includes(id)
+        ? previous.filter((item) => item !== id)
+        : [...previous, id]
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-white font-['Inter',sans-serif] text-[#101828] mt-32">
+      {/* Breadcrumb */}
+      <div className="mx-auto max-w-[1365px] px-6 pt-8">
+        <div className="flex items-center gap-2 text-[15px] font-bold text-[#0065f2]">
+          <a href="/" className="underline underline-offset-2">
+            Home
+          </a>
+          <ChevronRight size={17} />
+          <span className="underline underline-offset-2">
+            Service providers
+          </span>
+        </div>
+      </div>
+
+      {/* Hero */}
+      <section className="mt-8 bg-[#f5f7fa]">
+        <div className="mx-auto grid max-w-[1365px] grid-cols-1 gap-12 px-6 py-[52px] lg:grid-cols-[1fr_420px] lg:items-start">
+          <div>
+            <h1 className="text-[38px] font-normal leading-tight tracking-[-0.04em] text-[#0065f2]">
+              Antalya Manpower Job Marketplace
+            </h1>
+
+            <p className="mt-5 max-w-[650px] text-[20px] leading-[1.35] text-[#101828] font-light">
+              Explore manpower categories, employer requirements, candidate
+              services, destination markets, and recruitment stages across
+              Kuwait, GCC, Germany, and Europe.
+            </p>
           </div>
 
-          <div className="flex flex-col gap-4 lg:ml-auto lg:flex-row lg:items-center">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <div>
+            <label className="mb-2 block text-[16px] font-bold text-[#101828]">
+              Search
+            </label>
 
+            <div className="relative">
               <input
-                type="text"
-                placeholder="Search jobs..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full rounded-full border border-gray-300 bg-white px-11 py-3 text-[16px] outline-none transition focus:border-[#0658d4] lg:w-[280px]"
+                onChange={(event) => {
+                  setSearchTerm(event.target.value);
+                  setPage(1);
+                }}
+                placeholder="Search jobs, providers, countries, services..."
+                className="h-[43px] w-full rounded-[3px] border border-[#101828] bg-white px-4 pr-12 text-[16px] outline-none focus:border-[#0065f2]"
+              />
+
+              <Search
+                size={24}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#101828]"
               />
             </div>
-
-            <button className="flex min-w-[230px] items-center justify-between rounded-full border border-gray-300 bg-white px-6 py-3 text-[16px] font-medium">
-              Sort by
-              <ChevronDown size={18} />
-            </button>
           </div>
         </div>
       </section>
 
-      {/* SECTION 3: JOB SEARCH BODY */}
-      <section className="mx-auto max-w-[1800px] px-6 py-8">
-        <div className="grid grid-cols-1 gap-8 xl:grid-cols-[1fr_1.05fr]">
-          {/* LEFT SIDE - SCROLLABLE JOB LIST */}
-          <div className="max-h-[calc(100vh-150px)] overflow-y-auto pr-2 scrollbar-hide">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              {filteredJobs.length > 0 ? (
-                filteredJobs.map((job) => (
-                  <JobCard
-                    key={job.id}
-                    job={job}
-                    selectedJob={selectedJob}
-                    setSelectedJob={setSelectedJob}
-                  />
-                ))
-              ) : (
-                <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center md:col-span-2">
-                  <Briefcase className="mx-auto mb-4 h-12 w-12 text-gray-300" />
-                  <h3 className="text-xl font-semibold text-gray-600">
-                    No jobs found
-                  </h3>
-                  <p className="text-gray-400">Try adjusting your search criteria</p>
-                </div>
+      {/* Pills */}
+      <section className="border-y border-[#d4d8df] bg-white">
+        <div className="mx-auto flex max-w-[1365px] flex-wrap items-center gap-3 px-6 py-[16px]">
+          <button
+            type="button"
+            className="rounded-full bg-[#0065f2] px-7 py-[11px] text-[16px] font-bold text-white"
+          >
+            Jobs & Providers {filteredProviders.length}
+          </button>
+
+          <button
+            type="button"
+            className="rounded-full bg-[#e8f1ff] px-7 py-[11px] text-[16px] font-bold text-[#0065f2]"
+          >
+            Packages 61
+          </button>
+
+          <div className="mx-2 hidden h-11 w-px bg-[#d4d8df] md:block" />
+
+          {["Employer type", "Destination country", "Preferred language"].map(
+            (pill) => (
+              <button
+                type="button"
+                key={pill}
+                className="flex items-center gap-2 rounded-full bg-[#e8f1ff] px-7 py-[11px] text-[16px] font-bold text-[#0065f2]"
+              >
+                {pill}
+                <ChevronDown size={19} />
+              </button>
+            )
+          )}
+
+         
+        </div>
+      </section>
+
+      {/* Body */}
+      <main className="mx-auto grid max-w-[1365px] grid-cols-1 gap-[34px] px-6 py-[34px] lg:grid-cols-[320px_1fr]">
+        {/* Filters */}
+        <aside className="hidden lg:block">
+          <div className="sticky top-4">
+            <div className="mb-1 border-b border-[#d4d8df] pb-3 text-[15px] text-[#344054]">
+              filters
+            </div>
+
+            {filterGroups.map((group, index) => (
+              <FilterGroup
+                key={`${group.title}-${index}`}
+                group={group}
+                selectedFilters={selectedFilters}
+                setSelectedFilters={(value) => {
+                  setSelectedFilters(value);
+                  setPage(1);
+                }}
+              />
+            ))}
+          </div>
+        </aside>
+
+        {/* Results */}
+        <section>
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            <span className="text-[16px] text-[#101828]">
+              {filteredProviders.length} results
+            </span>
+
+            {selectedFilterChips.map((chip) => (
+              <span
+                key={`${chip.key}-${chip.value}`}
+                className="flex items-center gap-2 rounded-full bg-[#eef0f3] px-4 py-[7px] text-[14px] font-bold"
+              >
+                {chip.value}
+                <button type="button" onClick={() => removeChip(chip)}>
+                  <X size={16} />
+                </button>
+              </span>
+            ))}
+
+            {(selectedFilterChips.length > 0 || searchTerm) && (
+              <button
+                type="button"
+                onClick={clearAllFilters}
+                className="rounded-full bg-[#eef0f3] px-4 py-[7px] text-[14px] font-bold"
+              >
+                clear all filters
+              </button>
+            )}
+          </div>
+
+          {paginatedProviders.length > 0 ? (
+            <div className="grid grid-cols-1 gap-[18px] md:grid-cols-2 xl:grid-cols-3">
+              {paginatedProviders.map((provider) => (
+                <ProviderCard
+                  key={provider.id}
+                  provider={provider}
+                  saved={savedProviders.includes(provider.id)}
+                  compared={comparedProviders.includes(provider.id)}
+                  onSave={toggleSave}
+                  onCompare={toggleCompare}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-[8px] border border-[#cfd4dc] bg-white p-12 text-center">
+              <Search className="mx-auto mb-4 text-[#98a2b3]" size={42} />
+              <h3 className="text-xl font-bold">No jobs or providers found</h3>
+              <p className="mt-2 text-[#667085]">
+                Try changing your keyword or clearing filters.
+              </p>
+            </div>
+          )}
+
+          {/* Pagination */}
+          <div className="mx-auto mt-[72px] flex max-w-[920px] items-center justify-between mb-96">
+            <button
+              type="button"
+              disabled={page === 1}
+              onClick={() => setPage((previous) => Math.max(1, previous - 1))}
+              className={`flex items-center gap-3 text-[17px] font-medium ${
+                page === 1 ? "text-[#9aa3b2]" : "text-[#101828]"
+              }`}
+            >
+              <ChevronRight className="rotate-180" size={26} />
+              Previous
+            </button>
+
+            <div className="flex items-center gap-6 text-[18px]">
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+                (pageNumber) => (
+                  <button
+                    type="button"
+                    key={pageNumber}
+                    onClick={() => setPage(pageNumber)}
+                    className={`flex h-8 w-8 items-center justify-center ${
+                      page === pageNumber
+                        ? "bg-[#101828] font-bold text-white"
+                        : "text-[#101828]"
+                    }`}
+                  >
+                    {pageNumber}
+                  </button>
+                )
               )}
             </div>
+
+            <button
+              type="button"
+              disabled={page === totalPages}
+              onClick={() =>
+                setPage((previous) => Math.min(totalPages, previous + 1))
+              }
+              className={`flex items-center gap-3 text-[17px] font-medium ${
+                page === totalPages ? "text-[#9aa3b2]" : "text-[#101828]"
+              }`}
+            >
+              Next
+              <ChevronRight size={26} />
+            </button>
           </div>
-
-          {/* RIGHT SIDE - FIXED DETAIL PANEL */}
-          <div className="xl:sticky xl:top-28 xl:h-[calc(100vh-130px)]">
-            <div className="h-full overflow-y-auto rounded-2xl border border-gray-200 bg-white p-8 scrollbar-hide">
-              <div className="flex items-start justify-between gap-6 border-b border-gray-200 pb-8">
-                <div className="flex items-start gap-5">
-                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-tl-full rounded-bl-full bg-gray-100 text-[#d9d9d9]">
-                    {selectedJob.icon}
-                  </div>
-
-                  <div>
-                    <h3 className="text-[26px] font-medium tracking-[-0.02em] text-[#202533]">
-                      {selectedJob.company}
-                    </h3>
-
-                    <p className="mt-1 text-sm text-[#48515f]">
-                      Updated: March 16, 2026
-                    </p>
-                  </div>
-                </div>
-
-                <button
-                  onClick={handleViewJob}
-                  className="hidden rounded-full bg-[#0658d4] px-7 py-4 text-base font-bold text-white transition hover:bg-[#0547aa] md:flex"
-                >
-                  View job ↗
-                </button>
-              </div>
-
-              <div className="py-9">
-                <h2 className="text-[32px] font-black leading-tight tracking-[-0.04em] text-[#202533] md:text-[40px]">
-                  {selectedJob.title}
-                </h2>
-
-                <div className="mt-5 flex items-center gap-3 text-sm font-black uppercase tracking-[0.22em] text-[#202533]">
-                  <Clock size={16} />
-                  22 days left to apply
-                </div>
-
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <span className="rounded-full bg-[#003b72] px-5 py-3 text-sm font-bold text-white">
-                    Graduate
-                  </span>
-
-                  <span className="rounded-full bg-[#4f3c96] px-5 py-3 text-sm font-bold text-white">
-                    {selectedJob.type}
-                  </span>
-
-                  <span className="rounded-full bg-[#77b77a] px-5 py-3 text-sm font-bold text-white">
-                    {selectedJob.location}
-                  </span>
-
-                  <span className="rounded-full bg-[#c5aa57] px-5 py-3 text-sm font-bold text-white">
-                    {selectedJob.salary}
-                  </span>
-                </div>
-
-                <div className="mt-8 space-y-7 text-[20px] leading-[1.45] text-[#202533]">
-                  <p>{selectedJob.description}</p>
-
-                  <p>
-                    Working with committed employers, you will gain early
-                    responsibility and broad experience across the full employment
-                    lifecycle. Antalya supports candidates with structured guidance
-                    from role discovery to employer engagement.
-                  </p>
-
-                  <div>
-                    <h3 className="mb-4 text-[20px] font-black">Benefits:</h3>
-
-                    <ul className="list-disc space-y-3 pl-6">
-                      {selectedJob.benefits.map((benefit) => (
-                        <li key={benefit}>{benefit}</li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h3 className="mb-4 text-[20px] font-black">
-                      Requirements:
-                    </h3>
-
-                    <ul className="list-disc space-y-2 pl-6">
-                      {selectedJob.requirements.map((req) => (
-                        <li key={req}>{req}</li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h3 className="mb-4 text-[20px] font-black">How to Apply</h3>
-
-                    <p>
-                      If you are interested in this opportunity, submit your CV and
-                      our recruitment team will guide you through the next steps.
-                      Apply today to move your career forward.
-                    </p>
-                  </div>
-                </div>
-
-                <button
-                  onClick={handleViewJob}
-                  className="mt-12 rounded-full bg-[#0658d4] px-20 py-5 text-lg font-bold text-white transition hover:bg-[#0547aa]"
-                >
-                  View job ↗
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <FAQSection />
-      <IndustryCarousel />
-      <CareerAdviceSection />
-
-      <style>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
+        </section>
+      </main>
     </div>
   );
 }
